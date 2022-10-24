@@ -1,12 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getServerAuthSession } from "../../server/common/get-server-auth-session";
+import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
+import { useRouter } from "next/router";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerAuthSession({ req, res });
+  const searchword = req.query.searchword as string;
 
-  if (session) {
+  if (session && searchword) {
     const searchParams = new URLSearchParams([
-      ["query", "springsteen"],
+      ["query", searchword],
       ["type", "album"],
       ["limit", "10"],
     ]);
@@ -21,10 +23,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     );
 
     const search = await response.json();
-    return res.status(200).json(search.albums);
+    console.log(search);
+    return res.status(200).send(search);
   }
 
-  return res.status(401).json({ error: "no valid session" });
+  return res.status(401).json({ error: "no valid session or searchword" });
 };
 
 export default handler;
