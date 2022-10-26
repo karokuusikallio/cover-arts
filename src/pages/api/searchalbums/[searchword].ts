@@ -22,6 +22,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     );
 
     const search = await response.json();
+
     return res.status(200).send(search);
   }
 

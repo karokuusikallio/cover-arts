@@ -18,6 +18,7 @@ export const serverSchema = z.object({
   ),
   SPOTIFY_CLIENT_ID: z.string(),
   SPOTIFY_CLIENT_SECRET: z.string(),
+  SPOTIFY_AUTH_URL: z.string(),
 });
 
 /**
