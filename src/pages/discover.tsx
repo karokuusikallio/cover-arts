@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
 import { WithContext as ReactTags, Tag } from "react-tag-input";
@@ -17,22 +18,30 @@ const Browse: NextPage = () => {
   const [targetPopularity, setTargetPopularity] = useState<number>(50);
   const [albumUrls, setAlbumUrls] = useState<string[]>([]);
 
+  const { data: session } = useSession();
+
   useEffect(() => {
     const getSeeds = async () => {
-      const response = await fetch("/api/getavailableseeds");
-      const seeds = await response.json();
+      if (session?.accessToken) {
+        const response = await fetch(
+          `/api/getavailableseeds?accessToken=${session?.accessToken}`
+        );
+        const seeds = await response.json();
 
-      const seedsAsTags = seeds.genres.map((name: string, index: number) => {
-        return {
-          id: index.toString(),
-          text: name,
-        };
-      });
-      setAvailableSeeds(seedsAsTags);
+        console.log(seeds);
+
+        const seedsAsTags = seeds.genres.map((name: string, index: number) => {
+          return {
+            id: index.toString(),
+            text: name,
+          };
+        });
+        setAvailableSeeds(seedsAsTags);
+      }
     };
 
     getSeeds();
-  }, []);
+  }, [session?.accessToken]);
 
   const KeyCodes = {
     comma: 188,
@@ -71,15 +80,17 @@ const Browse: NextPage = () => {
     setAlbumUrls([]);
     const seedNames = chosenSeeds.map((seed) => seed.text);
     const seedsAsString = seedNames.join(",");
-    const response = await fetch(
-      `/api/getrecommendations/recommendations?seedgenres=${seedsAsString}&popularity=${targetPopularity}`
-    );
-    const result = await response.json();
+    if (session?.accessToken) {
+      const response = await fetch(
+        `/api/getrecommendations/recommendations?seedgenres=${seedsAsString}&popularity=${targetPopularity}&accessToken=${session.accessToken}`
+      );
+      const result = await response.json();
 
-    const resultUrls = result.tracks
-      .filter((track: Track) => track?.album?.images[0]?.url != undefined)
-      .map((track: Track) => track?.album?.images[0]?.url);
-    setAlbumUrls(resultUrls);
+      const resultUrls = result.tracks
+        .filter((track: Track) => track?.album?.images[0]?.url != undefined)
+        .map((track: Track) => track?.album?.images[0]?.url);
+      setAlbumUrls(resultUrls);
+    }
   };
 
   return (

@@ -1,11 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getServerAuthSession({ req, res });
-  const searchword = req.query.searchword as string;
+  const searchword = req.query.name as string;
+  const accessToken = req.query.accessToken;
 
-  if (session && searchword) {
+  if (searchword) {
     const searchParams = new URLSearchParams([
       ["query", searchword],
       ["type", "album"],
@@ -16,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       `https://api.spotify.com/v1/search?${searchParams}`,
       {
         headers: {
-          Authorization: `Bearer ${session.accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -26,7 +25,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(200).send(search);
   }
 
-  return res.status(401).json({ error: "no valid session or searchword" });
+  return res.status(401).json({ error: "no valid searchword" });
 };
 
 export default handler;

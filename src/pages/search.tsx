@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -15,13 +16,20 @@ const Search: NextPage = () => {
   const [searchParam, setSearchParam] = useState<string>("");
   const [albums, setAlbums] = useState<Array<Album>>([]);
 
+  const { data: session } = useSession();
+
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const promise = await fetch(`/api/searchalbums/${searchParam}`);
+    if (session?.accessToken) {
+      const promise = await fetch(
+        `/api/searchalbums/query?name=${searchParam}&accessToken=${session.accessToken}`
+      );
 
-    const response = await promise.json();
-    setAlbums(response.albums.items);
-    setSearchParam("");
+      const response = await promise.json();
+      console.log(response);
+      setAlbums(response.albums.items);
+      setSearchParam("");
+    }
   };
 
   return (

@@ -6,6 +6,7 @@ const basic = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
 
 const refreshAccessToken = async (token: JWT) => {
+  console.log("access token refreshed: ", token);
   try {
     const response = await fetch(TOKEN_ENDPOINT, {
       method: "POST",
