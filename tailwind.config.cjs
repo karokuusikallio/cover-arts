@@ -6,6 +6,9 @@ module.exports = {
       colors: {
         spotartPurple: "#905E96",
       },
+      backgroundImage: {
+        "record-store": "url('../../public/pexels-lopsan-2191013.jpg')",
+      },
     },
   },
   plugins: [],

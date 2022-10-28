@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import HeroSection from "./components/HeroSection";
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession();
@@ -7,8 +8,10 @@ const Home: NextPage = () => {
   if (session && status === "authenticated") {
     return (
       <main>
-        <h1>SpotArt App</h1>
-        <p>Welcome {session.user?.name}</p>
+        <HeroSection backgroundName="record-store">
+          <h1 className="opacity-100">SpotArt App</h1>
+        </HeroSection>
+        <p>Welcome {session.user?.id}!</p>
       </main>
     );
   }

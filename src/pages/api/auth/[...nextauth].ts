@@ -6,7 +6,6 @@ import { env } from "../../../env/server.mjs";
 export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, account }) {
-      console.log("token from jwt: ", token);
       if (account && account.expires_at && user) {
         return {
           accessToken: account.access_token,
@@ -16,11 +15,9 @@ export const authOptions: NextAuthOptions = {
         };
       }
 
-      console.log("date now: ", new Date(Date.now()));
-      console.log("expires: ", new Date(token.accessTokenExpires));
+      console.log("accessTokenExpires: ", new Date(token.accessTokenExpires));
 
       if (Date.now() < token.accessTokenExpires) {
-        console.log("no need to refresh");
         return token;
       }
 

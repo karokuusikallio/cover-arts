@@ -5,8 +5,13 @@ const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 const basic = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
 
+interface RequestedToken {
+  expires_in: number;
+  access_token: string;
+  refresh_token?: string;
+}
+
 const refreshAccessToken = async (token: JWT) => {
-  console.log("access token refreshed: ", token);
   try {
     const response = await fetch(TOKEN_ENDPOINT, {
       method: "POST",
@@ -20,7 +25,9 @@ const refreshAccessToken = async (token: JWT) => {
       }),
     });
 
-    const refreshedToken = await response.json();
+    const refreshedToken: RequestedToken = await response.json();
+
+    console.log("response: ", refreshedToken);
 
     if (!response.ok) {
       throw refreshedToken;
@@ -29,7 +36,7 @@ const refreshAccessToken = async (token: JWT) => {
     return {
       ...token,
       accessToken: refreshedToken.access_token,
-      accessTokenExpires: Date.now() + refreshedToken.expires_at * 1000,
+      accessTokenExpires: Date.now() + refreshedToken.expires_in * 1000,
       refreshToken: refreshedToken.refresh_token ?? token.refreshToken, // Fall back to old refresh token
     };
   } catch (error) {

@@ -8,8 +8,8 @@ const Header = () => {
   const { data: session } = useSession();
 
   return (
-    <header className="flex h-[100px] items-center justify-between p-5 shadow-md">
-      <div className="mx-20 flex">
+    <header className="z-1000 sticky top-0 flex h-[100px] items-center py-5 shadow-lg">
+      <div className="mx-20 flex w-screen">
         <Link href="/">
           <a className="flex items-center px-5">
             <Image
@@ -28,12 +28,19 @@ const Header = () => {
             <a className="px-5">Discover Albums</a>
           </Link>
         </nav>
-        {session && (
-          <button type="submit" onClick={() => signOut()}>
+      </div>
+      {session && (
+        <div className="flex whitespace-nowrap">
+          <p className="px-5">Logged in as: {session.user?.id}</p>
+          <button
+            className="float-right mr-20"
+            type="submit"
+            onClick={() => signOut()}
+          >
             Logout
           </button>
-        )}
-      </div>
+        </div>
+      )}
     </header>
   );
 };
