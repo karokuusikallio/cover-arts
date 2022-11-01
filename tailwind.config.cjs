@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       colors: {
         spotartPurple: "#905E96",
+        spotartLightPurple: "#D58BDD",
       },
       backgroundImage: {
         "record-store": "url('../../public/pexels-lopsan-2191013.jpg')",

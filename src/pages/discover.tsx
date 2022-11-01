@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
 import { WithContext as ReactTags, Tag } from "react-tag-input";
+import HeroSection from "./components/HeroSection";
 
 interface Track {
   album: {
@@ -95,7 +96,9 @@ const Browse: NextPage = () => {
 
   return (
     <main>
-      <h1>Browse</h1>
+      <HeroSection backgroundName="record-store">
+        <h1>Discover new albums</h1>
+      </HeroSection>
       <form onSubmit={handleBrowseSubmit}>
         <p>Categories</p>
         <ReactTags

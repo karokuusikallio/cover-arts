@@ -21,13 +21,11 @@ const refreshAccessToken = async (token: JWT) => {
       },
       body: new URLSearchParams({
         grant_type: "refresh_token",
-        refresh_token: token.refreshToken,
+        refresh_token: token.refreshToken as string,
       }),
     });
 
     const refreshedToken: RequestedToken = await response.json();
-
-    console.log("response: ", refreshedToken);
 
     if (!response.ok) {
       throw refreshedToken;
