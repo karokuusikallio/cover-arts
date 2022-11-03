@@ -2,13 +2,16 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const searchword = req.query.name as string;
+  const offset = req.query.offset as string;
   const accessToken = req.query.accessToken;
+
+  console.log("search made with offset: ", offset);
 
   if (searchword) {
     const searchParams = new URLSearchParams([
       ["query", searchword],
       ["type", "album"],
-      ["limit", "10"],
+      ["offset", offset],
     ]);
 
     const response = await fetch(

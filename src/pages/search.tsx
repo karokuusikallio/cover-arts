@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
 import HeroSection from "./components/HeroSection";
+import InfiniteScroll from "./components/InfiniteScroll";
 import Modal from "./components/Modal";
 
 interface Album {
@@ -26,36 +26,24 @@ interface Artist {
 
 const Search: NextPage = () => {
   const [searchParam, setSearchParam] = useState<string>("");
-  const [albums, setAlbums] = useState<Array<Album>>([]);
+  const [applySearch, setApplySearch] = useState<string>();
   const [modalInfo, setModalInfo] = useState<Album>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
-  const { data: session } = useSession();
-
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (session?.accessToken) {
-      const response = await fetch(
-        `/api/searchalbums/query?name=${searchParam}&accessToken=${session.accessToken}`
-      );
-
-      const data = await response.json();
-      console.log(data);
-      setAlbums(data.albums.items);
-    }
+    setApplySearch(searchParam);
   };
 
-  const passModalInfo = (albumId: string) => {
-    const chosenAlbum = albums.find((album) => album.id === albumId);
-    if (chosenAlbum) {
-      setModalInfo(chosenAlbum);
-      setModalVisible(true);
-    }
+  const passModalInfo = (album: Album) => {
+    console.log(album);
+    setModalInfo(album);
+    setModalVisible(true);
   };
 
   return (
     <main className="flex-1 overflow-y-scroll">
-      <HeroSection backgroundName="record-store">
+      <HeroSection backgroundName="record-wall">
         <h1>Search for album covers</h1>
       </HeroSection>
       <form onSubmit={handleSearch} className="mx-20 flex flex-col">
@@ -73,20 +61,7 @@ const Search: NextPage = () => {
           Search
         </button>
       </form>
-      {albums.length > 0 && <p className="mx-20 my-2">Results:</p>}
-      <div className="mx-10 flex flex-wrap">
-        {albums.map((album) =>
-          album.images[1] ? (
-            <span
-              className="relative m-2 h-[300px] w-[300px] cursor-pointer"
-              onClick={() => passModalInfo(album.id)}
-              key={album.id}
-            >
-              <Image src={album.images[1].url} alt="" layout="fill" />
-            </span>
-          ) : null
-        )}
-      </div>
+      <InfiniteScroll searchParam={applySearch} passModalInfo={passModalInfo} />
       <Modal
         albumName={modalInfo?.name}
         imageUrl={modalInfo?.images[0]?.url}

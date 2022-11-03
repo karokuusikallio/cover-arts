@@ -6,4 +6,27 @@
   html {
     font-family: Montserrat, sans-serif;
   }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    height: 7px;
+    background-color: #d58bdd;
+    border-radius: 7px;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #905e96;
+    cursor: pointer;
+  }
+
+  input[type="range"]::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+  }
 }

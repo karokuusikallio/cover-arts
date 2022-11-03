@@ -8,7 +8,12 @@ module.exports = {
         spotartLightPurple: "#D58BDD",
       },
       backgroundImage: {
-        "record-store": "url('../../public/pexels-lopsan-2191013.jpg')",
+        "record-wall": "url('/img/record-wall.jpg')",
+        "record-store": "url('/img/record-store.jpg')",
+        record: "url('/img/record.jpg')",
+      },
+      boxShadow: {
+        footer: "0px -4px 3px rgba(0, 0, 0, 0.07)",
       },
     },
   },

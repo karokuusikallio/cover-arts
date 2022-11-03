@@ -7,7 +7,7 @@ const Home: NextPage = () => {
 
   if (session && status === "authenticated") {
     return (
-      <main>
+      <main className="flex-1 overflow-y-scroll">
         <HeroSection backgroundName="record-store">
           <h1 className="opacity-100">SpotArt App</h1>
         </HeroSection>
@@ -17,7 +17,7 @@ const Home: NextPage = () => {
   }
 
   return (
-    <main>
+    <main className="flex-1 overflow-y-scroll">
       <h1>SpotArt App</h1>
       <button type="submit" onClick={() => signIn("spotify")}>
         Sign in with Spotify
