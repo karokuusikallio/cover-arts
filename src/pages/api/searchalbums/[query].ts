@@ -5,8 +5,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const offset = req.query.offset as string;
   const accessToken = req.query.accessToken;
 
-  console.log("search made with offset: ", offset);
-
   if (searchword) {
     const searchParams = new URLSearchParams([
       ["query", searchword],
@@ -25,7 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const search = await response.json();
 
-    return res.status(200).send(search);
+    return res.status(200).send(search.albums.items);
   }
 
   return res.status(401).json({ error: "no valid searchword" });

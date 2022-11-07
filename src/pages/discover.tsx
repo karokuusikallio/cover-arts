@@ -4,6 +4,7 @@ import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
 import { WithContext as ReactTags, Tag } from "react-tag-input";
 import HeroSection from "./components/HeroSection";
+import InfiniteScroll from "./components/InfiniteScroll";
 import Modal from "./components/Modal";
 
 interface Album {
@@ -36,9 +37,8 @@ interface Track {
 const Browse: NextPage = () => {
   const [availableSeeds, setAvailableSeeds] = useState<Tag[]>([]);
   const [chosenSeeds, setChosenSeeds] = useState<Tag[]>([]);
+  const [seedsAsString, setSeedsAsString] = useState<string>("");
   const [targetPopularity, setTargetPopularity] = useState<number>(50);
-
-  const [albums, setAlbums] = useState<Array<Album>>([]);
 
   const [modalInfo, setModalInfo] = useState<Album>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -103,28 +103,14 @@ const Browse: NextPage = () => {
 
   const handleBrowseSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setAlbums([]);
     const seedNames = chosenSeeds.map((seed) => seed.text);
     const seedsAsString = seedNames.join(",");
-    if (session?.accessToken) {
-      const response = await fetch(
-        `/api/getrecommendations/recommendations?seedgenres=${seedsAsString}&popularity=${targetPopularity}&accessToken=${session.accessToken}`
-      );
-      const result = await response.json();
-
-      const resultAlbums = result.tracks
-        .filter((track: Track) => track?.album?.images[1]?.url != undefined)
-        .map((track: Track) => track?.album);
-      setAlbums(resultAlbums);
-    }
+    setSeedsAsString(seedsAsString);
   };
 
-  const passModalInfo = (albumId: string) => {
-    const chosenAlbum = albums.find((album) => album.id === albumId);
-    if (chosenAlbum) {
-      setModalInfo(chosenAlbum);
-      setModalVisible(true);
-    }
+  const passModalInfo = (album: Album) => {
+    setModalInfo(album);
+    setModalVisible(true);
   };
 
   const customRender = (tag: Tag) => {
@@ -182,22 +168,15 @@ const Browse: NextPage = () => {
             Search
           </button>
         </form>
-        <div>
-          {albums.length > 0 && <p className="m-2">Results:</p>}
-          <div className="flex flex-wrap">
-            {albums.map((album, index) =>
-              album.images[1] ? (
-                <span
-                  className="relative m-2 h-[300px] w-[300px] cursor-pointer"
-                  onClick={() => passModalInfo(album.id)}
-                  key={index}
-                >
-                  <Image src={album.images[1].url} alt="" layout="fill" />
-                </span>
-              ) : null
-            )}
-          </div>
-        </div>
+      </div>
+      <div>
+        <InfiniteScroll
+          SCROLL_TYPE="discover"
+          queryName="discoverAlbums"
+          seedsAsString={seedsAsString}
+          targetPopularity={targetPopularity}
+          passModalInfo={passModalInfo}
+        />
       </div>
       <Modal
         albumName={modalInfo?.name}

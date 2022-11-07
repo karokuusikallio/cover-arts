@@ -24,20 +24,50 @@ interface Artist {
   name: string;
 }
 
-export interface InfiniteScrollProps {
-  searchParam: string;
-  accessToken?: string;
+interface ISCommonProps {
+  queryName: string;
   passModalInfo?: (albumId: string) => void;
 }
 
-const InfiniteScroll = ({
-  searchParam,
-  passModalInfo,
-}: InfiniteScrollProps) => {
-  const { ref, inView } = useInView();
+interface ISSearchProps extends ISCommonProps {
+  SCROLL_TYPE: "search";
+  searchParam: string | undefined;
+}
 
+interface ISDiscoverProps extends ISCommonProps {
+  SCROLL_TYPE: "discover";
+  seedsAsString: string;
+  targetPopularity: number;
+}
+
+type InfiniteScrollProps = ISSearchProps | ISDiscoverProps;
+
+const InfiniteScroll = (props: InfiniteScrollProps) => {
   const { data: session } = useSession();
   const accessToken = session?.accessToken;
+
+  let query: Array<string | number | undefined> = [];
+  let url: string;
+  let enabled = false;
+
+  if (props.SCROLL_TYPE === "search") {
+    query = [props.queryName, props.searchParam, accessToken];
+    url = `/api/searchalbums/query?name=${props.searchParam}&accessToken=${accessToken}`;
+    enabled = !!props.searchParam && !!accessToken;
+  }
+
+  if (props.SCROLL_TYPE === "discover") {
+    query = [
+      props.queryName,
+      props.seedsAsString,
+      props.targetPopularity,
+      accessToken,
+    ];
+    url = `/api/getrecommendations/recommendations?seedgenres=${props.seedsAsString}&popularity=${props.targetPopularity}&accessToken=${accessToken}`;
+    enabled = !!props.seedsAsString && !!accessToken;
+  }
+
+  const { ref, inView } = useInView();
 
   const {
     status,
@@ -51,12 +81,10 @@ const InfiniteScroll = ({
     hasNextPage,
     hasPreviousPage,
   } = useInfiniteQuery(
-    ["projects", searchParam, accessToken],
+    [query],
     async ({ pageParam = 0 }) => {
       const offset = pageParam ? pageParam * 20 : 0;
-      const res = await fetch(
-        `/api/searchalbums/query?name=${searchParam}&offset=${offset}&accessToken=${accessToken}`
-      );
+      const res = await fetch(`${url}&offset=${offset}`);
       return res.json();
     },
     {
@@ -64,7 +92,7 @@ const InfiniteScroll = ({
         const nextPage = allPages.length + 1;
         return nextPage;
       },
-      enabled: !!searchParam && !!accessToken,
+      enabled,
     }
   );
 
@@ -74,9 +102,9 @@ const InfiniteScroll = ({
     }
   }, [inView, fetchNextPage]);
 
-  const pages: Pages = data?.pages;
+  const pages = data?.pages;
 
-  console.log(status);
+  console.log(data);
 
   return (
     <main>
@@ -98,17 +126,16 @@ const InfiniteScroll = ({
                 : null}
             </button>
           </div>
-          <div className="mx-10 flex flex-wrap">
-            {pages &&
-              pages.map((page, index) => {
-                return (
-                  <div key={index} className="flex flex-wrap">
-                    {page.albums.items
-                      ? page.albums.items.map((album: Album) => {
+          <div>
+            {pages
+              ? pages.map((page, index) => (
+                  <div key={index} className="flex flex-wrap justify-center">
+                    {page
+                      ? page.map((album: Album) => {
                           return album.images[1] && album.id ? (
                             <span
                               className="relative m-2 h-[300px] w-[300px] cursor-pointer"
-                              onClick={() => passModalInfo(album)}
+                              onClick={() => props.passModalInfo(album)}
                               key={album.id}
                             >
                               <Image
@@ -121,8 +148,8 @@ const InfiniteScroll = ({
                         })
                       : null}
                   </div>
-                );
-              })}
+                ))
+              : null}
           </div>
           <div>
             <button

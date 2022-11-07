@@ -36,7 +36,6 @@ const Search: NextPage = () => {
   };
 
   const passModalInfo = (album: Album) => {
-    console.log(album);
     setModalInfo(album);
     setModalVisible(true);
   };
@@ -61,7 +60,12 @@ const Search: NextPage = () => {
           Search
         </button>
       </form>
-      <InfiniteScroll searchParam={applySearch} passModalInfo={passModalInfo} />
+      <InfiniteScroll
+        SCROLL_TYPE="search"
+        queryName="searchAlbums"
+        searchParam={applySearch}
+        passModalInfo={passModalInfo}
+      />
       <Modal
         albumName={modalInfo?.name}
         imageUrl={modalInfo?.images[0]?.url}
