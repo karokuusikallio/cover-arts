@@ -16,6 +16,10 @@ const Home: NextPage = () => {
     );
   }
 
+  if (status === "loading") {
+    return null;
+  }
+
   return (
     <main className="flex-1 overflow-y-scroll">
       <h1>SpotArt App</h1>

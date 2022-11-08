@@ -1,38 +1,14 @@
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
 import { WithContext as ReactTags, Tag } from "react-tag-input";
+import { delimiters, customRender } from "./components/TagHelpers";
+
 import HeroSection from "./components/HeroSection";
 import InfiniteScroll from "./components/InfiniteScroll";
 import Modal from "./components/Modal";
 
-interface Album {
-  name: string;
-  id: string;
-  images: Array<Image>;
-  artists: Array<Artist>;
-  release_date: string;
-  external_urls: {
-    spotify: string;
-  };
-}
-
-interface Image {
-  url: string;
-}
-
-interface Artist {
-  name: string;
-}
-
-interface Track {
-  album: {
-    images: Array<{
-      url: string;
-    }>;
-  };
-}
+import { Album } from "../types";
 
 const Browse: NextPage = () => {
   const [availableSeeds, setAvailableSeeds] = useState<Tag[]>([]);
@@ -66,13 +42,6 @@ const Browse: NextPage = () => {
     getSeeds();
   }, [session?.accessToken]);
 
-  const KeyCodes = {
-    comma: 188,
-    enter: 13,
-  };
-
-  const delimiters = [KeyCodes.comma, KeyCodes.enter];
-
   const handleDelete = (i: number) => {
     setChosenSeeds(chosenSeeds.filter((tag, index) => index !== i));
   };
@@ -86,15 +55,6 @@ const Browse: NextPage = () => {
     }
 
     return;
-  };
-
-  const handleDrag = (seed: Tag, currPos: number, newPos: number) => {
-    const newChosenSeeds = chosenSeeds.slice();
-
-    chosenSeeds.splice(currPos, 1);
-    chosenSeeds.splice(newPos, 0, seed);
-
-    setChosenSeeds(newChosenSeeds);
   };
 
   const handleSliderChange = (newValue: number) => {
@@ -111,14 +71,6 @@ const Browse: NextPage = () => {
   const passModalInfo = (album: Album) => {
     setModalInfo(album);
     setModalVisible(true);
-  };
-
-  const customRender = (tag: Tag) => {
-    return (
-      <div className="cursor-pointer text-spotartPurple hover:text-spotartLightPurple">
-        {tag.text}
-      </div>
-    );
   };
 
   return (
@@ -146,7 +98,6 @@ const Browse: NextPage = () => {
             delimiters={delimiters}
             handleDelete={handleDelete}
             handleAddition={handleAddition}
-            handleDrag={handleDrag}
             inputFieldPosition="bottom"
             minQueryLength={1}
             autocomplete
@@ -179,11 +130,7 @@ const Browse: NextPage = () => {
         />
       </div>
       <Modal
-        albumName={modalInfo?.name}
-        imageUrl={modalInfo?.images[0]?.url}
-        artists={modalInfo?.artists}
-        releaseDate={modalInfo?.release_date}
-        url={modalInfo?.external_urls.spotify}
+        {...modalInfo}
         modalVisible={modalVisible}
         closeModal={() => setModalVisible(false)}
       />

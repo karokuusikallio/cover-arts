@@ -30,6 +30,8 @@ const Search: NextPage = () => {
   const [modalInfo, setModalInfo] = useState<Album>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
+  console.log(modalInfo);
+
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setApplySearch(searchParam);
@@ -67,11 +69,7 @@ const Search: NextPage = () => {
         passModalInfo={passModalInfo}
       />
       <Modal
-        albumName={modalInfo?.name}
-        imageUrl={modalInfo?.images[0]?.url}
-        artists={modalInfo?.artists}
-        releaseDate={modalInfo?.release_date}
-        url={modalInfo?.external_urls.spotify}
+        {...modalInfo}
         modalVisible={modalVisible}
         closeModal={() => setModalVisible(false)}
       />

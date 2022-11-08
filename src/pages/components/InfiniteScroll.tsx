@@ -5,69 +5,27 @@ import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-interface Album {
-  name: string;
-  id: string;
-  images: Array<Image>;
-  artists: Array<Artist>;
-  release_date: string;
-  external_urls: {
-    spotify: string;
-  };
-}
-
-interface Image {
-  url: string;
-}
-
-interface Artist {
-  name: string;
-}
-
-interface ISCommonProps {
-  queryName: string;
-  passModalInfo?: (albumId: string) => void;
-}
-
-interface ISSearchProps extends ISCommonProps {
-  SCROLL_TYPE: "search";
-  searchParam: string | undefined;
-}
-
-interface ISDiscoverProps extends ISCommonProps {
-  SCROLL_TYPE: "discover";
-  seedsAsString: string;
-  targetPopularity: number;
-}
+import { Album, ISSearchProps, ISDiscoverProps } from "../../types";
 
 type InfiniteScrollProps = ISSearchProps | ISDiscoverProps;
 
 const InfiniteScroll = (props: InfiniteScrollProps) => {
   const { data: session } = useSession();
+  const { ref, inView } = useInView();
   const accessToken = session?.accessToken;
 
   let query: Array<string | number | undefined> = [];
   let url: string;
-  let enabled = false;
 
-  if (props.SCROLL_TYPE === "search") {
-    query = [props.queryName, props.searchParam, accessToken];
+  if (props.SCROLL_TYPE === "search" && accessToken && props.searchParam) {
+    query = [props.queryName, props.searchParam];
     url = `/api/searchalbums/query?name=${props.searchParam}&accessToken=${accessToken}`;
-    enabled = !!props.searchParam && !!accessToken;
   }
 
-  if (props.SCROLL_TYPE === "discover") {
-    query = [
-      props.queryName,
-      props.seedsAsString,
-      props.targetPopularity,
-      accessToken,
-    ];
+  if (props.SCROLL_TYPE === "discover" && accessToken && props.seedsAsString) {
+    query = [props.queryName, props.seedsAsString, props.targetPopularity];
     url = `/api/getrecommendations/recommendations?seedgenres=${props.seedsAsString}&popularity=${props.targetPopularity}&accessToken=${accessToken}`;
-    enabled = !!props.seedsAsString && !!accessToken;
   }
-
-  const { ref, inView } = useInView();
 
   const {
     status,
@@ -75,11 +33,8 @@ const InfiniteScroll = (props: InfiniteScrollProps) => {
     error,
     isFetching,
     isFetchingNextPage,
-    isFetchingPreviousPage,
     fetchNextPage,
-    fetchPreviousPage,
     hasNextPage,
-    hasPreviousPage,
   } = useInfiniteQuery(
     [query],
     async ({ pageParam = 0 }) => {
@@ -92,40 +47,24 @@ const InfiniteScroll = (props: InfiniteScrollProps) => {
         const nextPage = allPages.length + 1;
         return nextPage;
       },
-      enabled,
+      enabled: !(query[1] === undefined),
     }
   );
 
   useEffect(() => {
-    if (inView) {
+    if (inView && status === "success") {
       fetchNextPage();
     }
-  }, [inView, fetchNextPage]);
+  }, [inView, fetchNextPage, status]);
 
   const pages = data?.pages;
 
-  console.log(data);
-
   return (
     <main>
-      {status === "loading" ? (
-        <p>Loading...</p>
-      ) : status === "error" ? (
+      {status === "error" && error instanceof Error ? (
         <span>Error: {error.message}</span>
       ) : (
         <>
-          <div>
-            <button
-              onClick={() => fetchPreviousPage()}
-              disabled={!hasPreviousPage || isFetchingPreviousPage}
-            >
-              {isFetchingPreviousPage
-                ? "Loading more..."
-                : hasPreviousPage
-                ? "Load Older"
-                : null}
-            </button>
-          </div>
           <div>
             {pages
               ? pages.map((page, index) => (
@@ -161,14 +100,12 @@ const InfiniteScroll = (props: InfiniteScrollProps) => {
                 ? "Loading more..."
                 : hasNextPage
                 ? "Load Newer"
+                : status === "loading"
+                ? ""
                 : "Nothing more to load"}
             </button>
           </div>
-          <div>
-            {isFetching && !isFetchingNextPage
-              ? "Background Updating..."
-              : null}
-          </div>
+          <div>{isFetching && !isFetchingNextPage ? "Loading..." : null}</div>
         </>
       )}
     </main>

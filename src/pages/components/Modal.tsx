@@ -1,39 +1,36 @@
 import Image from "next/image";
+import { Album } from "../../types";
 
-interface ModalProps {
-  albumName?: string;
-  imageUrl?: string;
-  artists?: Artist[];
-  releaseDate?: string;
-  url?: string;
+interface ModalProps extends Album {
   modalVisible: boolean;
   closeModal: () => void;
 }
 
-interface Artist {
-  name: string;
-}
-
 const Modal = ({
-  albumName,
-  imageUrl,
+  name,
+  images,
   artists,
-  releaseDate,
-  url,
+  release_date,
+  external_urls,
   modalVisible,
   closeModal,
 }: ModalProps) => {
   const artistNames = artists?.map((artist) => artist.name);
   const artistsNamesAsString = artistNames?.join(", ");
-  const releaseYear = releaseDate?.substring(0, 4);
+  const releaseYear = release_date?.substring(0, 4);
 
   if (modalVisible) {
     return (
       <div className="absolute top-0 flex h-screen w-screen items-center justify-center overflow-hidden bg-black/30">
         <div className="flex h-5/6 w-5/6 bg-white">
           <span className="relative m-5 w-2/3">
-            {imageUrl ? (
-              <Image src={imageUrl} alt="" layout="fill" objectFit="contain" />
+            {images[0] ? (
+              <Image
+                src={images[0]?.url}
+                alt=""
+                layout="fill"
+                objectFit="contain"
+              />
             ) : null}
           </span>
           <div className="m-5 flex w-1/3 flex-col justify-center text-center">
@@ -42,17 +39,17 @@ const Modal = ({
             <br />
             <br />
             <b>Album:</b>
-            <p>{albumName}</p>
+            <p>{name ?? "Not Found"}</p>
             <br />
             <br />
             <b>Release Year</b>
             <p>{releaseYear}</p>
             <br />
             <br />
-            {url ? (
+            {external_urls.spotify ? (
               <a
                 className="text-bold mx-5 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
-                href={url}
+                href={external_urls.spotify}
                 target="_blank"
                 rel="noreferrer"
               >
