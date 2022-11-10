@@ -6,7 +6,7 @@ import { delimiters, customRender } from "./components/TagHelpers";
 
 import HeroSection from "./components/HeroSection";
 import InfiniteScroll from "./components/InfiniteScroll";
-import Modal from "./components/Modal";
+import Modal from "./components/AlbumInfo";
 
 import { Album } from "../types";
 
@@ -129,11 +129,13 @@ const Browse: NextPage = () => {
           passModalInfo={passModalInfo}
         />
       </div>
-      <Modal
-        {...modalInfo}
-        modalVisible={modalVisible}
-        closeModal={() => setModalVisible(false)}
-      />
+      {modalInfo ? (
+        <Modal
+          {...modalInfo}
+          modalVisible={modalVisible}
+          closeModal={() => setModalVisible(false)}
+        />
+      ) : null}
     </main>
   );
 };

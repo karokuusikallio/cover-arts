@@ -37,13 +37,16 @@ const InfiniteScroll = (props: InfiniteScrollProps) => {
     hasNextPage,
   } = useInfiniteQuery(
     [query],
-    async ({ pageParam = 0 }) => {
+    async ({ pageParam = 0 }): Promise<Album[]> => {
       const offset = pageParam ? pageParam * 20 : 0;
       const res = await fetch(`${url}&offset=${offset}`);
       return res.json();
     },
     {
       getNextPageParam: (lastPage, allPages) => {
+        if (props.SCROLL_TYPE === "discover") {
+          return undefined;
+        }
         const nextPage = allPages.length + 1;
         return nextPage;
       },
@@ -70,8 +73,8 @@ const InfiniteScroll = (props: InfiniteScrollProps) => {
               ? pages.map((page, index) => (
                   <div key={index} className="flex flex-wrap justify-center">
                     {page
-                      ? page.map((album: Album) => {
-                          return album.images[1] && album.id ? (
+                      ? page.map((album) => {
+                          return album.images[1] ? (
                             <span
                               className="relative m-2 h-[300px] w-[300px] cursor-pointer"
                               onClick={() => props.passModalInfo(album)}
@@ -102,7 +105,7 @@ const InfiniteScroll = (props: InfiniteScrollProps) => {
                 ? "Load Newer"
                 : status === "loading"
                 ? ""
-                : "Nothing more to load"}
+                : "End of results"}
             </button>
           </div>
           <div>{isFetching && !isFetchingNextPage ? "Loading..." : null}</div>

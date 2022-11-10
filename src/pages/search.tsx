@@ -1,36 +1,16 @@
 import type { NextPage } from "next";
-import Image from "next/image";
 import { useState } from "react";
 import HeroSection from "./components/HeroSection";
 import InfiniteScroll from "./components/InfiniteScroll";
-import Modal from "./components/Modal";
+import Modal from "./components/AlbumInfo";
 
-interface Album {
-  name: string;
-  id: string;
-  images: Array<Image>;
-  artists: Array<Artist>;
-  release_date: string;
-  external_urls: {
-    spotify: string;
-  };
-}
-
-interface Image {
-  url: string;
-}
-
-interface Artist {
-  name: string;
-}
+import { Album } from "../types";
 
 const Search: NextPage = () => {
   const [searchParam, setSearchParam] = useState<string>("");
   const [applySearch, setApplySearch] = useState<string>();
   const [modalInfo, setModalInfo] = useState<Album>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-
-  console.log(modalInfo);
 
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -68,11 +48,13 @@ const Search: NextPage = () => {
         searchParam={applySearch}
         passModalInfo={passModalInfo}
       />
-      <Modal
-        {...modalInfo}
-        modalVisible={modalVisible}
-        closeModal={() => setModalVisible(false)}
-      />
+      {modalInfo ? (
+        <Modal
+          {...modalInfo}
+          modalVisible={modalVisible}
+          closeModal={() => setModalVisible(false)}
+        />
+      ) : null}
     </main>
   );
 };

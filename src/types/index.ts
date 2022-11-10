@@ -1,3 +1,19 @@
+export interface DiscoverSearch {
+  tracks: Track[];
+}
+
+interface Track {
+  album: Album;
+}
+
+export interface AlbumSearch {
+  albums: Items;
+}
+
+interface Items {
+  items: Album[];
+}
+
 export interface Album {
   name: string;
   id: string;
