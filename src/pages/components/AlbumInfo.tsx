@@ -1,7 +1,10 @@
+import { useState } from "react";
 import Image from "next/image";
-import { Album } from "../../types";
+import { Album, Collection } from "../../types";
+import { useQuery } from "@tanstack/react-query";
 
 import Modal from "./Modal";
+import Togglable from "./Togglable";
 
 interface AlbumInfoProps extends Album {
   modalVisible: boolean;
@@ -15,8 +18,39 @@ const AlbumInfo = ({
   release_date,
   external_urls,
   modalVisible,
+  id,
   closeModal,
 }: AlbumInfoProps) => {
+  const [chosenCollectionId, setChosenCollectionId] = useState<string>("");
+
+  const getCollections = async (): Promise<Collection[]> => {
+    const response = await fetch("/api/collection");
+    const collections = await response.json();
+    return collections;
+  };
+
+  const { data: collections, status } = useQuery(
+    ["collections"],
+    getCollections
+  );
+
+  const handleAddAlbum = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const addedAlbum = await fetch(`/api/album/${chosenCollectionId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ albumId: id }),
+      });
+
+      alert(`Added album ${addedAlbum}!`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const artistNames = artists?.map((artist) => artist.name);
   const artistsNamesAsString = artistNames?.join(", ");
   const releaseYear = release_date?.substring(0, 4);
@@ -58,6 +92,31 @@ const AlbumInfo = ({
                 Listen to The Album
               </a>
             ) : null}
+
+            <Togglable buttonLabel="Add album to collection">
+              <form onSubmit={handleAddAlbum}>
+                <div>
+                  <label>Collection name</label>
+                  <select
+                    value={chosenCollectionId}
+                    onChange={({ target }) =>
+                      setChosenCollectionId(target.value)
+                    }
+                  >
+                    {collections &&
+                      status === "success" &&
+                      collections.map((collection) => (
+                        <option key={collection.id} value={collection.id}>
+                          {collection.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+                <button type="submit" disabled={!chosenCollectionId}>
+                  Add album
+                </button>
+              </form>
+            </Togglable>
           </div>
           <button
             className="text-bold relative top-0 right-0 m-5 h-8 w-8 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"

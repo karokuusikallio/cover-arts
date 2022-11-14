@@ -1,14 +1,16 @@
 import type { NextPage } from "next";
 import { useState } from "react";
+
 import HeroSection from "./components/HeroSection";
 import InfiniteScroll from "./components/InfiniteScroll";
-import Modal from "./components/AlbumInfo";
+import AlbumInfo from "./components/AlbumInfo";
 
 import { Album } from "../types";
 
 const Search: NextPage = () => {
   const [searchParam, setSearchParam] = useState<string>("");
   const [applySearch, setApplySearch] = useState<string>();
+
   const [modalInfo, setModalInfo] = useState<Album>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
@@ -49,7 +51,7 @@ const Search: NextPage = () => {
         passModalInfo={passModalInfo}
       />
       {modalInfo ? (
-        <Modal
+        <AlbumInfo
           {...modalInfo}
           modalVisible={modalVisible}
           closeModal={() => setModalVisible(false)}

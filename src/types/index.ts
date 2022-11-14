@@ -14,6 +14,12 @@ interface Items {
   items: Album[];
 }
 
+export interface Collection {
+  id: string;
+  name: string;
+  album: Album;
+}
+
 export interface Album {
   name: string;
   id: string;

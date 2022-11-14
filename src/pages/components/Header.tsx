@@ -39,7 +39,7 @@ const Header = () => {
           <button
             className="text-bold float-right m-5 h-8 w-24 rounded-lg bg-spotartPurple uppercase text-white hover:bg-spotartLightPurple"
             type="submit"
-            onClick={() => signOut()}
+            onClick={() => signOut({ callbackUrl: "/" })}
           >
             Logout
           </button>

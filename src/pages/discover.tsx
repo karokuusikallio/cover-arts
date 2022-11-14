@@ -4,9 +4,9 @@ import { FormEvent, useEffect, useState } from "react";
 import { WithContext as ReactTags, Tag } from "react-tag-input";
 import { delimiters, customRender } from "./components/TagHelpers";
 
+import AlbumInfo from "./components/AlbumInfo";
 import HeroSection from "./components/HeroSection";
 import InfiniteScroll from "./components/InfiniteScroll";
-import Modal from "./components/AlbumInfo";
 
 import { Album } from "../types";
 
@@ -130,7 +130,7 @@ const Browse: NextPage = () => {
         />
       </div>
       {modalInfo ? (
-        <Modal
+        <AlbumInfo
           {...modalInfo}
           modalVisible={modalVisible}
           closeModal={() => setModalVisible(false)}
