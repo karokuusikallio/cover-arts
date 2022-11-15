@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { FormEvent, useEffect, useState } from "react";
 import { WithContext as ReactTags, Tag } from "react-tag-input";
-import { delimiters, customRender } from "./components/TagHelpers";
+import { delimiters, customRender } from "./components/helpers/TagHelpers";
 
 import AlbumInfo from "./components/AlbumInfo";
 import HeroSection from "./components/HeroSection";

@@ -17,7 +17,11 @@ interface Items {
 export interface Collection {
   id: string;
   name: string;
-  album: Album;
+  albums: AlbumInDb[];
+}
+
+interface AlbumInDb {
+  albumId: string;
 }
 
 export interface Album {

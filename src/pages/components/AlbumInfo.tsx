@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Album, Collection } from "../../types";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import Modal from "./Modal";
 import Togglable from "./Togglable";
@@ -22,6 +22,7 @@ const AlbumInfo = ({
   closeModal,
 }: AlbumInfoProps) => {
   const [chosenCollectionId, setChosenCollectionId] = useState<string>("");
+  console.log(chosenCollectionId);
 
   const getCollections = async (): Promise<Collection[]> => {
     const response = await fetch("/api/collection");
@@ -29,27 +30,31 @@ const AlbumInfo = ({
     return collections;
   };
 
+  const queryClient = useQueryClient();
   const { data: collections, status } = useQuery(
     ["collections"],
     getCollections
   );
 
-  const handleAddAlbum = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const addedAlbum = await fetch(`/api/album/${chosenCollectionId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ albumId: id }),
-      });
-
-      alert(`Added album ${addedAlbum}!`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const handleAddAlbum = useMutation({
+    mutationFn: async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      try {
+        await fetch(`/api/album/${chosenCollectionId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ albumId: id }),
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["collections"]);
+    },
+  });
 
   const artistNames = artists?.map((artist) => artist.name);
   const artistsNamesAsString = artistNames?.join(", ");
@@ -94,7 +99,7 @@ const AlbumInfo = ({
             ) : null}
 
             <Togglable buttonLabel="Add album to collection">
-              <form onSubmit={handleAddAlbum}>
+              <form onSubmit={handleAddAlbum.mutate}>
                 <div>
                   <label>Collection name</label>
                   <select
@@ -112,9 +117,7 @@ const AlbumInfo = ({
                       ))}
                   </select>
                 </div>
-                <button type="submit" disabled={!chosenCollectionId}>
-                  Add album
-                </button>
+                <button type="submit">Add album</button>
               </form>
             </Togglable>
           </div>
