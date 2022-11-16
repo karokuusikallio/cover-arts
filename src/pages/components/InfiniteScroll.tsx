@@ -19,7 +19,7 @@ const InfiniteScroll = (props: InfiniteScrollProps) => {
 
   if (props.SCROLL_TYPE === "search" && accessToken && props.searchParam) {
     query = [props.queryName, props.searchParam];
-    url = `/api/searchalbums/query?name=${props.searchParam}&accessToken=${accessToken}`;
+    url = `/api/searchalbums/query?search=${props.searchParam}&accessToken=${accessToken}`;
   }
 
   if (props.SCROLL_TYPE === "discover" && accessToken && props.seedsAsString) {

@@ -2,16 +2,13 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { AlbumSearch } from "../../../types";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const searchword = req.query.name as string;
-  const offset = req.query.offset as string;
-  const accessToken = req.query.accessToken;
-  const { albumIds } = req.query;
+  const { albumIds, accessToken, offset, search } = req.query;
 
-  if (searchword && accessToken) {
+  if (search && accessToken) {
     const searchParams = new URLSearchParams([
-      ["query", searchword],
+      ["query", search as string],
       ["type", "album"],
-      ["offset", offset],
+      ["offset", offset as string],
     ]);
 
     try {
@@ -45,8 +42,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       );
 
       const { albums } = (await response.json()) as AlbumSearch;
-      console.log(albums);
-      return res.status(200).send(albums.items);
+      return res.status(200).send(albums);
     } catch (error) {
       return res.status(400).json({ error });
     }

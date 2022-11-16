@@ -1,7 +1,11 @@
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Image from "next/image";
-import { Album, Collection } from "../../types";
+import { Album } from "../../types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Select from "react-select";
+
+import getCollections from "./helpers/getCollectionsQuery";
 
 import Modal from "./Modal";
 import Togglable from "./Togglable";
@@ -24,17 +28,21 @@ const AlbumInfo = ({
   const [chosenCollectionId, setChosenCollectionId] = useState<string>("");
   console.log(chosenCollectionId);
 
-  const getCollections = async (): Promise<Collection[]> => {
-    const response = await fetch("/api/collection");
-    const collections = await response.json();
-    return collections;
-  };
+  const { data: session } = useSession();
 
   const queryClient = useQueryClient();
   const { data: collections, status } = useQuery(
-    ["collections"],
-    getCollections
+    ["collections", session?.user?.id],
+    () => getCollections(session?.user?.id)
   );
+
+  const collectionForSelect =
+    collections && collections?.length > 0
+      ? collections.map((collection) => ({
+          value: collection.id,
+          label: collection.name,
+        }))
+      : [];
 
   const handleAddAlbum = useMutation({
     mutationFn: async (e: React.FormEvent<HTMLFormElement>) => {
@@ -102,20 +110,11 @@ const AlbumInfo = ({
               <form onSubmit={handleAddAlbum.mutate}>
                 <div>
                   <label>Collection name</label>
-                  <select
+                  <Select
                     value={chosenCollectionId}
-                    onChange={({ target }) =>
-                      setChosenCollectionId(target.value)
-                    }
-                  >
-                    {collections &&
-                      status === "success" &&
-                      collections.map((collection) => (
-                        <option key={collection.id} value={collection.id}>
-                          {collection.name}
-                        </option>
-                      ))}
-                  </select>
+                    onChange={setChosenCollectionId}
+                    options={collectionForSelect}
+                  />
                 </div>
                 <button type="submit">Add album</button>
               </form>

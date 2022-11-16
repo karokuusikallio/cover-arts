@@ -1,29 +1,22 @@
+import type { NextPage } from "next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { Collection } from "../../types";
 import AddCollectionForm from "./AddCollectionForm";
+import Link from "next/link";
 
-import getSeveralAlbums from "./helpers/getSeveralAlbums";
+import getCollections from "./helpers/getCollectionsQuery";
 
-const Dashboard = () => {
+const Dashboard: NextPage = () => {
   const [addModalVisibility, setAddModalVisibility] = useState<boolean>(false);
 
   const { data: session } = useSession();
   const queryClient = useQueryClient();
 
-  const getCollections = async (): Promise<Collection[] | undefined> => {
-    if (session?.user?.id) {
-      const response = await fetch(`/api/collection/${session.user.id}`);
-      const collections = await response.json();
-      return collections;
-    }
-    return;
-  };
-
   const { data: collections, status } = useQuery(
-    ["collections"],
-    getCollections
+    ["collections", session?.user?.id],
+    () => getCollections(session?.user?.id)
   );
 
   const handleAddCollection = useMutation({
@@ -57,6 +50,7 @@ const Dashboard = () => {
         Add new Collection
       </button>
       <AddCollectionForm
+        closeModal={() => setAddModalVisibility(false)}
         visibility={addModalVisibility}
         handleAddCollection={handleAddCollection.mutate}
       />
@@ -66,14 +60,11 @@ const Dashboard = () => {
         collections &&
         collections.length > 0 &&
         session?.user?.id ? (
-        collections.map((collection) => {
-          const albums = getSeveralAlbums(
-            session?.user?.id as string,
-            collection
-          );
-          console.log(albums);
-          return;
-        })
+        collections.map((collection) => (
+          <div key={collection.id}>
+            <Link href={`/collection/${collection.id}`}>{collection.name}</Link>
+          </div>
+        ))
       ) : (
         <p>No collections</p>
       )}

@@ -1,12 +1,9 @@
-import { Collection } from "../../../types";
-
 const getSeveralAlbums = async (
-  userId: string,
-  collection: Collection
+  accessToken: string,
+  albumIds: string
 ): Promise<any> => {
-  const albumIds = collection.albums.map((album) => album.albumId).join(",");
   const response = await fetch(
-    `/api/searchalbums?accessToken=${userId}&albumIds=${albumIds}`
+    `/api/searchalbums/query?accessToken=${accessToken}&albumIds=${albumIds}`
   );
   const albums = await response.json();
   return albums;
