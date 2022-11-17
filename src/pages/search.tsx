@@ -11,8 +11,7 @@ const Search: NextPage = () => {
   const [searchParam, setSearchParam] = useState<string>("");
   const [applySearch, setApplySearch] = useState<string>();
 
-  const [modalInfo, setModalInfo] = useState<Album>();
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [modalInfo, setModalInfo] = useState<Album | null>(null);
 
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,7 +20,6 @@ const Search: NextPage = () => {
 
   const passModalInfo = (album: Album) => {
     setModalInfo(album);
-    setModalVisible(true);
   };
 
   return (
@@ -53,8 +51,8 @@ const Search: NextPage = () => {
       {modalInfo ? (
         <AlbumInfo
           {...modalInfo}
-          modalVisible={modalVisible}
-          closeModal={() => setModalVisible(false)}
+          closeModal={() => setModalInfo(null)}
+          openedFrom="search"
         />
       ) : null}
     </main>

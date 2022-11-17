@@ -1,18 +1,25 @@
-import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Album } from "../../types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Select from "react-select";
 
-import getCollections from "./helpers/getCollectionsQuery";
+import getSessionInfo from "./helpers/getSessionInfo";
+import getCollections from "./helpers/getCollections";
 
 import Modal from "./Modal";
 import Togglable from "./Togglable";
 
 interface AlbumInfoProps extends Album {
-  modalVisible: boolean;
+  openedFrom: "search" | "collection";
+  collectionId?: string;
   closeModal: () => void;
+  deleteAlbumFromState: (albumId: string) => void;
+}
+
+interface ReactSelectObject {
+  value: string;
+  label: string;
 }
 
 const AlbumInfo = ({
@@ -21,19 +28,21 @@ const AlbumInfo = ({
   artists,
   release_date,
   external_urls,
-  modalVisible,
   id,
+  openedFrom,
+  collectionId,
+  deleteAlbumFromState,
   closeModal,
 }: AlbumInfoProps) => {
-  const [chosenCollectionId, setChosenCollectionId] = useState<string>("");
-  console.log(chosenCollectionId);
-
-  const { data: session } = useSession();
+  const [chosenCollection, setChosenCollection] = useState<ReactSelectObject>();
+  const [albumFormVisible, setAlbumFormVisible] = useState<boolean>(false);
+  const [userId, setUserId] = useState<string>("");
 
   const queryClient = useQueryClient();
-  const { data: collections, status } = useQuery(
-    ["collections", session?.user?.id],
-    () => getCollections(session?.user?.id)
+  const { data: collections } = useQuery(
+    ["collections", userId],
+    () => getCollections(userId),
+    { enabled: !!userId }
   );
 
   const collectionForSelect =
@@ -47,91 +56,132 @@ const AlbumInfo = ({
   const handleAddAlbum = useMutation({
     mutationFn: async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      try {
-        await fetch(`/api/album/${chosenCollectionId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ albumId: id }),
-        });
-      } catch (error) {
-        console.log(error);
+      if (chosenCollection) {
+        await fetch(
+          `/api/album/query?collectionId=${chosenCollection.value}&albumId=${id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["collections"]);
+      setAlbumFormVisible(false);
     },
   });
+
+  const handleDeleteAlbum = useMutation({
+    mutationFn: async () => {
+      if (collectionId) {
+        try {
+          const response = await fetch(
+            `/api/album/query?collectionId=${collectionId}&albumId=${id}`,
+            {
+              method: "DELETE",
+            }
+          );
+          const deletedItems = await response.json();
+          return deletedItems;
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    },
+    onSuccess: () => {
+      deleteAlbumFromState(id);
+      queryClient.invalidateQueries(["collections"]);
+    },
+  });
+
+  useEffect(() => {
+    const getUserId = async () => {
+      const session = await getSessionInfo();
+      if (session && session.user) {
+        setUserId(session.user.id);
+      }
+    };
+
+    getUserId();
+  }, []);
 
   const artistNames = artists?.map((artist) => artist.name);
   const artistsNamesAsString = artistNames?.join(", ");
   const releaseYear = release_date?.substring(0, 4);
 
-  if (modalVisible) {
-    return (
-      <Modal>
-        <div className="flex h-5/6 w-5/6 bg-white">
-          <span className="relative m-5 w-2/3">
-            {images[0] ? (
-              <Image
-                src={images[0]?.url}
-                alt=""
-                layout="fill"
-                objectFit="contain"
-              />
-            ) : null}
-          </span>
-          <div className="m-5 flex w-1/3 flex-col justify-center text-center">
-            <b>Artist:</b>
-            <p>{artistsNamesAsString}</p>
-            <br />
-            <br />
-            <b>Album:</b>
-            <p>{name ?? "Not Found"}</p>
-            <br />
-            <br />
-            <b>Release Year</b>
-            <p>{releaseYear}</p>
-            <br />
-            <br />
-            {external_urls.spotify ? (
-              <a
-                className="text-bold mx-5 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
-                href={external_urls.spotify}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Listen to The Album
-              </a>
-            ) : null}
+  return (
+    <Modal>
+      <div className="flex h-5/6 w-5/6 bg-white">
+        <span className="relative m-5 w-2/3">
+          {images[0] ? (
+            <Image
+              src={images[0]?.url}
+              alt=""
+              layout="fill"
+              objectFit="contain"
+            />
+          ) : null}
+        </span>
+        <div className="m-5 flex w-1/3 flex-col justify-center text-center">
+          <b>Artist:</b>
+          <p>{artistsNamesAsString}</p>
+          <br />
+          <br />
+          <b>Album:</b>
+          <p>{name ?? "Not Found"}</p>
+          <br />
+          <br />
+          <b>Release Year</b>
+          <p>{releaseYear}</p>
+          <br />
+          <br />
+          {external_urls.spotify ? (
+            <a
+              className="text-bold mx-5 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
+              href={external_urls.spotify}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Listen to The Album
+            </a>
+          ) : null}
 
-            <Togglable buttonLabel="Add album to collection">
+          {openedFrom === "search" ? (
+            <Togglable
+              buttonLabel="Add album to collection"
+              visible={albumFormVisible}
+              setVisibility={setAlbumFormVisible}
+            >
               <form onSubmit={handleAddAlbum.mutate}>
                 <div>
                   <label>Collection name</label>
                   <Select
-                    value={chosenCollectionId}
-                    onChange={setChosenCollectionId}
+                    value={chosenCollection}
+                    onChange={setChosenCollection}
                     options={collectionForSelect}
                   />
                 </div>
                 <button type="submit">Add album</button>
               </form>
             </Togglable>
-          </div>
-          <button
-            className="text-bold relative top-0 right-0 m-5 h-8 w-8 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
-            onClick={() => closeModal()}
-          >
-            X
-          </button>
+          ) : (
+            <button onClick={handleDeleteAlbum.mutate}>
+              Remove from collection
+            </button>
+          )}
         </div>
-      </Modal>
-    );
-  }
-
-  return null;
+        <button
+          className="text-bold relative top-0 right-0 m-5 h-8 w-8 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
+          onClick={() => closeModal()}
+        >
+          X
+        </button>
+      </div>
+    </Modal>
+  );
 };
 
 export default AlbumInfo;

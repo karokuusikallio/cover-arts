@@ -1,28 +1,28 @@
-import { useState, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface TogglableProps {
   buttonLabel: string;
   children?: ReactNode;
+  visible: boolean;
+  setVisibility: (visible: boolean) => void;
 }
 
 const Togglable = (props: TogglableProps) => {
-  const [visible, setVisible] = useState(false);
-
-  const hideWhenVisible = { display: visible ? "none" : "" };
-  const showWhenVisible = { display: visible ? "" : "none" };
-
-  const toggleVisibility = () => {
-    setVisible(!visible);
-  };
+  const hideWhenVisible = { display: props.visible ? "none" : "" };
+  const showWhenVisible = { display: props.visible ? "" : "none" };
 
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+        <button onClick={() => props.setVisibility(!props.visible)}>
+          {props.buttonLabel}
+        </button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={toggleVisibility}>Cancel</button>
+        <button onClick={() => props.setVisibility(!props.visible)}>
+          Cancel
+        </button>
       </div>
     </div>
   );

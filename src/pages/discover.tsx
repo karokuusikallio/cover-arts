@@ -16,8 +16,7 @@ const Browse: NextPage = () => {
   const [seedsAsString, setSeedsAsString] = useState<string>("");
   const [targetPopularity, setTargetPopularity] = useState<number>(50);
 
-  const [modalInfo, setModalInfo] = useState<Album>();
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [modalInfo, setModalInfo] = useState<Album | null>(null);
 
   const { data: session } = useSession();
 
@@ -70,7 +69,6 @@ const Browse: NextPage = () => {
 
   const passModalInfo = (album: Album) => {
     setModalInfo(album);
-    setModalVisible(true);
   };
 
   return (
@@ -132,8 +130,8 @@ const Browse: NextPage = () => {
       {modalInfo ? (
         <AlbumInfo
           {...modalInfo}
-          modalVisible={modalVisible}
-          closeModal={() => setModalVisible(false)}
+          closeModal={() => setModalInfo(null)}
+          openedFrom="search"
         />
       ) : null}
     </main>

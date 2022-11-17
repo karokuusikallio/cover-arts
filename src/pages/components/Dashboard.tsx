@@ -6,7 +6,7 @@ import { Collection } from "../../types";
 import AddCollectionForm from "./AddCollectionForm";
 import Link from "next/link";
 
-import getCollections from "./helpers/getCollectionsQuery";
+import getCollections from "./helpers/getCollections";
 
 const Dashboard: NextPage = () => {
   const [addModalVisibility, setAddModalVisibility] = useState<boolean>(false);
