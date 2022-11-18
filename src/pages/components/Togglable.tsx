@@ -14,13 +14,19 @@ const Togglable = (props: TogglableProps) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={() => props.setVisibility(!props.visible)}>
+        <button
+          className="text-bold my-5 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
+          onClick={() => props.setVisibility(!props.visible)}
+        >
           {props.buttonLabel}
         </button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={() => props.setVisibility(!props.visible)}>
+        <button
+          className="text-bold m-5 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
+          onClick={() => props.setVisibility(!props.visible)}
+        >
           Cancel
         </button>
       </div>

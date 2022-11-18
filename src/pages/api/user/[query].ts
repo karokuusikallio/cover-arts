@@ -2,28 +2,34 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../server/db/client";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method === "GET") {
-    const name = req.query.name as string;
-    try {
-      const user = await prisma.user.findUnique({
-        where: { name },
-      });
+  const { userId } = req.query;
 
-      return res.status(200).json(user);
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json({ error });
+  if (req.method === "GET") {
+    if (userId) {
+      try {
+        const user = await prisma.user.findUnique({
+          where: { name: userId as string },
+        });
+
+        return res.status(200).json(user);
+      } catch (error) {
+        console.log(error);
+        return res.status(400).json({ error });
+      }
     }
   }
 
   if (req.method === "POST") {
-    try {
-      const name = req.body.name;
-      const userCreated = await prisma.user.create({ data: { name } });
-      return res.status(200).json(userCreated);
-    } catch (error) {
-      console.log(error);
-      res.status(400).json(error);
+    if (userId) {
+      try {
+        const userCreated = await prisma.user.create({
+          data: { name: userId as string },
+        });
+        return res.status(200).json(userCreated);
+      } catch (error) {
+        console.log(error);
+        res.status(400).json(error);
+      }
     }
   }
 };

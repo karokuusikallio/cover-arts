@@ -22,6 +22,12 @@ interface ReactSelectObject {
   label: string;
 }
 
+enum AlbumCRUDStates {
+  idle = "idle",
+  loading = "loading",
+  finished = "finished",
+}
+
 const AlbumInfo = ({
   name,
   images,
@@ -36,6 +42,9 @@ const AlbumInfo = ({
 }: AlbumInfoProps) => {
   const [chosenCollection, setChosenCollection] = useState<ReactSelectObject>();
   const [albumFormVisible, setAlbumFormVisible] = useState<boolean>(false);
+  const [albumCRUDState, setAlbumCRUDState] = useState<AlbumCRUDStates>(
+    AlbumCRUDStates.idle
+  );
   const [userId, setUserId] = useState<string>("");
 
   const queryClient = useQueryClient();
@@ -56,27 +65,26 @@ const AlbumInfo = ({
   const handleAddAlbum = useMutation({
     mutationFn: async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      setAlbumCRUDState(AlbumCRUDStates.loading);
       if (chosenCollection) {
         await fetch(
           `/api/album/query?collectionId=${chosenCollection.value}&albumId=${id}`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
           }
         );
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["collections"]);
-      setAlbumFormVisible(false);
+      setAlbumCRUDState(AlbumCRUDStates.finished);
     },
   });
 
   const handleDeleteAlbum = useMutation({
     mutationFn: async () => {
       if (collectionId) {
+        setAlbumCRUDState(AlbumCRUDStates.loading);
         try {
           const response = await fetch(
             `/api/album/query?collectionId=${collectionId}&albumId=${id}`,
@@ -150,28 +158,48 @@ const AlbumInfo = ({
           ) : null}
 
           {openedFrom === "search" ? (
-            <Togglable
-              buttonLabel="Add album to collection"
-              visible={albumFormVisible}
-              setVisibility={setAlbumFormVisible}
-            >
-              <form onSubmit={handleAddAlbum.mutate}>
-                <div>
-                  <label>Collection name</label>
-                  <Select
-                    value={chosenCollection}
-                    onChange={setChosenCollection}
-                    options={collectionForSelect}
-                  />
-                </div>
-                <button type="submit">Add album</button>
-              </form>
-            </Togglable>
-          ) : (
-            <button onClick={handleDeleteAlbum.mutate}>
-              Remove from collection
-            </button>
-          )}
+            albumCRUDState === AlbumCRUDStates.idle ? (
+              <Togglable
+                buttonLabel="Add album to collection"
+                visible={albumFormVisible}
+                setVisibility={setAlbumFormVisible}
+              >
+                <form onSubmit={handleAddAlbum.mutate}>
+                  <div>
+                    <label>Collection name</label>
+                    <Select
+                      value={chosenCollection}
+                      onChange={setChosenCollection}
+                      options={collectionForSelect}
+                    />
+                  </div>
+                  <button
+                    className="text-bold m-5 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
+                    type="submit"
+                  >
+                    Add album
+                  </button>
+                </form>
+              </Togglable>
+            ) : albumCRUDState === AlbumCRUDStates.loading ? (
+              <p>Adding album...</p>
+            ) : albumCRUDState === AlbumCRUDStates.finished ? (
+              <p>Album Added!</p>
+            ) : null
+          ) : null}
+
+          {openedFrom === "collection" ? (
+            albumCRUDState === AlbumCRUDStates.idle ? (
+              <button
+                className="text-bold m-5 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
+                onClick={() => handleDeleteAlbum.mutate()}
+              >
+                Remove from collection
+              </button>
+            ) : albumCRUDState === AlbumCRUDStates.loading ? (
+              <p>Deleting album...</p>
+            ) : null
+          ) : null}
         </div>
         <button
           className="text-bold relative top-0 right-0 m-5 h-8 w-8 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
