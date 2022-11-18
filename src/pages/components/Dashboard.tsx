@@ -36,6 +36,8 @@ const Dashboard: NextPage = () => {
   const handleAddCollection = useMutation({
     mutationFn: async (collectionName: string): Promise<void> => {
       if (userId) {
+        setAddModalVisibility(false);
+        setLoading(true);
         const response = await fetch(
           `/api/collection/query?collectionName=${collectionName}&userId=${userId}`,
           {
@@ -45,7 +47,7 @@ const Dashboard: NextPage = () => {
 
         const collectionCreated = await response.json();
         setCollections([...collections, collectionCreated]);
-        setAddModalVisibility(false);
+        setLoading(false);
       }
       return;
     },
@@ -103,19 +105,19 @@ const Dashboard: NextPage = () => {
         handleAddCollection={handleAddCollection.mutate}
       />
       {loading ? (
-        <p>Getting collections...</p>
+        <p>Updating collections...</p>
       ) : collections.length === 0 ? (
         <p>No collections</p>
       ) : (
         collections.map((collection) => (
           <div
-            className="m-5 flex justify-between border-2 border-solid border-spotartPurple p-2"
+            className="m-5 flex justify-between rounded-lg border-2 border-solid border-spotartPurple p-2"
             key={collection.id}
           >
             <div className="flex w-1/2 flex-col text-left">
               <Link href={`/collection/${collection.id}`}>
                 <a className="text-l flex items-center font-semibold text-spotartPurple hover:text-spotartLightPurple">
-                  {collection.name}
+                  {collection.collectionName}
                 </a>
               </Link>
               <p>Albums in collection: {collection.albums.length}</p>

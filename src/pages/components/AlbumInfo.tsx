@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Album } from "../../types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Select from "react-select";
 
@@ -9,6 +8,8 @@ import getCollections from "./helpers/getCollections";
 
 import Modal from "./Modal";
 import Togglable from "./Togglable";
+
+import { Album, LoadingStates as AlbumCRUDStates } from "../../types/index";
 
 interface AlbumInfoProps extends Album {
   openedFrom: "search" | "collection";
@@ -20,12 +21,6 @@ interface AlbumInfoProps extends Album {
 interface ReactSelectObject {
   value: string;
   label: string;
-}
-
-enum AlbumCRUDStates {
-  idle = "idle",
-  loading = "loading",
-  finished = "finished",
 }
 
 const AlbumInfo = ({
@@ -40,7 +35,8 @@ const AlbumInfo = ({
   deleteAlbumFromState,
   closeModal,
 }: AlbumInfoProps) => {
-  const [chosenCollection, setChosenCollection] = useState<ReactSelectObject>();
+  const [chosenCollection, setChosenCollection] =
+    useState<ReactSelectObject | null>(null);
   const [albumFormVisible, setAlbumFormVisible] = useState<boolean>(false);
   const [albumCRUDState, setAlbumCRUDState] = useState<AlbumCRUDStates>(
     AlbumCRUDStates.idle
@@ -58,7 +54,7 @@ const AlbumInfo = ({
     collections && collections?.length > 0
       ? collections.map((collection) => ({
           value: collection.id,
-          label: collection.name,
+          label: collection.collectionName,
         }))
       : [];
 
@@ -174,6 +170,7 @@ const AlbumInfo = ({
                     />
                   </div>
                   <button
+                    disabled={chosenCollection === null}
                     className="text-bold m-5 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
                     type="submit"
                   >

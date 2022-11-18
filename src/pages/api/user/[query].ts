@@ -8,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (userId) {
       try {
         const user = await prisma.user.findUnique({
-          where: { name: userId as string },
+          where: { userName: userId as string },
         });
 
         return res.status(200).json(user);
@@ -23,7 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (userId) {
       try {
         const userCreated = await prisma.user.create({
-          data: { name: userId as string },
+          data: { userName: userId as string },
         });
         return res.status(200).json(userCreated);
       } catch (error) {

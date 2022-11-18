@@ -6,7 +6,7 @@ interface ModalProps {
 
 const Modal = (props: ModalProps) => {
   return (
-    <div className="absolute top-0 flex h-screen w-screen items-center justify-center overflow-hidden bg-black/30">
+    <div className="absolute top-0 left-0 flex h-screen w-screen items-center justify-center overflow-hidden bg-black/30">
       {props.children}
     </div>
   );

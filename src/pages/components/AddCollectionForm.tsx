@@ -13,15 +13,20 @@ const AddCollectionForm = (props: AddCollectionProps) => {
   const handleForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     props.handleAddCollection(collectionName);
+    setCollectionName("");
   };
 
   return props.visibility ? (
     <Modal>
-      <div className="flex h-1/4 w-1/2 justify-center bg-white align-middle">
-        <form onSubmit={handleForm} className="[&>*]:m-2">
+      <div className="flex h-1/4 w-1/2 justify-between bg-white align-middle">
+        <form
+          onSubmit={handleForm}
+          className="flex w-2/3 flex-col p-2 [&>*]:m-2"
+        >
           <label>Collection Name</label>
           <input
             type="text"
+            className="rounded-lg border-2 border-spotartPurple"
             value={collectionName}
             onChange={({ target }) => setCollectionName(target.value)}
           ></input>

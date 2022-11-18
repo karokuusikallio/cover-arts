@@ -11,20 +11,21 @@ datasource db {
 }
 
 model User {
-  name        String       @id
+  id          String       @id @default(uuid())
+  userName    String       @unique
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   collections Collection[]
 }
 
 model Collection {
-  id        String   @id @default(cuid())
-  name      String
-  albums    Album[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  User      User     @relation(fields: [userName], references: [name])
-  userName  String
+  id             String   @id @default(cuid())
+  collectionName String
+  albums         Album[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  User           User     @relation(fields: [userName], references: [userName])
+  userName       String
 }
 
 model Album {

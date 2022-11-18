@@ -10,18 +10,20 @@ import getSessionInfo from "../components/helpers/getSessionInfo";
 import getSeveralAlbums from "../components/helpers/getSeveralAlbums";
 import getCollections from "../components/helpers/getCollections";
 
-import { Album, Collection } from "../../types";
+import { Album, Collection, LoadingStates } from "../../types";
 
 const CollectionPage: NextPage = () => {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [collectionName, setCollectionName] = useState<string>("");
   const [modalAlbumInfo, setModalAlbumInfo] = useState<Album | null>(null);
+  const [isLoading, setLoading] = useState<LoadingStates>(LoadingStates.idle);
 
   const router = useRouter();
   const { collectionId } = router.query;
 
   useEffect(() => {
     const getAlbums = async () => {
+      setLoading(LoadingStates.loading);
       const session = await getSessionInfo();
 
       if (session && session.user && session.accessToken) {
@@ -31,7 +33,7 @@ const CollectionPage: NextPage = () => {
         );
 
         if (collection && collection.albums) {
-          setCollectionName(collection.name);
+          setCollectionName(collection.collectionName);
 
           const albumIds = collection.albums
             .map((album) => album.albumId)
@@ -44,6 +46,7 @@ const CollectionPage: NextPage = () => {
             );
             setAlbums(albumsForCollection);
           }
+          setLoading(LoadingStates.finished);
         }
       }
     };
@@ -63,9 +66,9 @@ const CollectionPage: NextPage = () => {
         <h1 className="opacity-100">{collectionName ?? ""}</h1>
       </HeroSection>
       <div className="flex flex-wrap justify-center">
-        {albums.length === 0 ? (
+        {isLoading === LoadingStates.loading ? (
           <p>Loading...</p>
-        ) : albums.length > 0 ? (
+        ) : isLoading === LoadingStates.finished && albums.length > 0 ? (
           albums.map((album) => {
             return album.images[1] ? (
               <span
@@ -77,9 +80,9 @@ const CollectionPage: NextPage = () => {
               </span>
             ) : null;
           })
-        ) : (
+        ) : isLoading === LoadingStates.finished && albums.length === 0 ? (
           <p>No albums</p>
-        )}
+        ) : null}
       </div>
       {modalAlbumInfo ? (
         <AlbumInfo

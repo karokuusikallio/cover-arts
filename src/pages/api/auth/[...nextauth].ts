@@ -15,8 +15,6 @@ export const authOptions: NextAuthOptions = {
         };
       }
 
-      console.log("accessTokenExpires: ", new Date(token.accessTokenExpires));
-
       if (Date.now() < token.accessTokenExpires) {
         return token;
       }

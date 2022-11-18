@@ -34,7 +34,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (collectionName && userId) {
       try {
         const collectionCreated = await prisma.collection.create({
-          data: { userName: userId as string, name: collectionName as string },
+          data: {
+            userName: userId as string,
+            collectionName: collectionName as string,
+          },
           include: { albums: true },
         });
         return res.status(200).json(collectionCreated);

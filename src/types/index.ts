@@ -16,7 +16,7 @@ interface Items {
 
 export interface Collection {
   id: string;
-  name: string;
+  collectionName: string;
   createdAt: string;
   albums: AlbumInDb[];
 }
@@ -59,4 +59,10 @@ export interface ISDiscoverProps extends ISCommonProps {
   SCROLL_TYPE: "discover";
   seedsAsString: string;
   targetPopularity: number;
+}
+
+export enum LoadingStates {
+  idle = "idle",
+  loading = "loading",
+  finished = "finished",
 }
