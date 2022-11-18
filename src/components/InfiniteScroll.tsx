@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-import { Album, ISSearchProps, ISDiscoverProps } from "../../types";
+import { Album, ISSearchProps, ISDiscoverProps } from "../types";
 
 type InfiniteScrollProps = ISSearchProps | ISDiscoverProps;
 

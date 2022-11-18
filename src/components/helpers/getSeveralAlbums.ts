@@ -1,7 +1,9 @@
+import { Album } from "../../types";
+
 const getSeveralAlbums = async (
   accessToken: string,
   albumIds: string
-): Promise<any> => {
+): Promise<Album[]> => {
   const response = await fetch(
     `/api/searchalbums/query?accessToken=${accessToken}&albumIds=${albumIds}`
   );

@@ -3,12 +3,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import HeroSection from "../components/HeroSection";
-import AlbumInfo from "../components/AlbumInfo";
+import HeroSection from "../../components/HeroSection";
+import AlbumInfo from "../../components/AlbumInfo";
 
-import getSessionInfo from "../components/helpers/getSessionInfo";
-import getSeveralAlbums from "../components/helpers/getSeveralAlbums";
-import getCollections from "../components/helpers/getCollections";
+import getSessionInfo from "../../components/helpers/getSessionInfo";
+import getSeveralAlbums from "../../components/helpers/getSeveralAlbums";
+import getCollections from "../../components/helpers/getCollections";
 
 import { Album, Collection, LoadingStates } from "../../types";
 

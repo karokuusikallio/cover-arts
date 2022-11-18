@@ -1,12 +1,12 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
-import HeroSection from "./components/HeroSection";
+import HeroSection from "../components/HeroSection";
 
-import Dashboard from "./components/Dashboard";
+import Dashboard from "../components/Dashboard";
 import { useEffect, useState } from "react";
 
-import getSessionInfo from "./components/helpers/getSessionInfo";
+import getSessionInfo from "../components/helpers/getSessionInfo";
 
 const Home: NextPage = () => {
   const [loggingIn, setLoggingIn] = useState<boolean>(false);

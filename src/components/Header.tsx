@@ -2,7 +2,7 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 
-import spotcoverlogo from "../../../public/spotart-logo.png";
+import spotcoverlogo from "../../public/spotart-logo.png";
 
 const Header = () => {
   const { data: session } = useSession();

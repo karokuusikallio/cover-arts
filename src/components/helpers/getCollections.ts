@@ -1,4 +1,4 @@
-import { Collection } from "../../../types";
+import { Collection } from "../../types";
 
 async function getCollections(userId: string): Promise<Collection[]>;
 

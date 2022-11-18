@@ -7,7 +7,7 @@ import Link from "next/link";
 import getSessionInfo from "./helpers/getSessionInfo";
 import getCollections from "./helpers/getCollections";
 
-import { Collection } from "../../types";
+import { Collection } from "../types";
 
 const Dashboard: NextPage = () => {
   const [addModalVisibility, setAddModalVisibility] = useState<boolean>(false);

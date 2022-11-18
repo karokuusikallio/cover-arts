@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
 import { useState } from "react";
 
-import HeroSection from "./components/HeroSection";
-import InfiniteScroll from "./components/InfiniteScroll";
-import AlbumInfo from "./components/AlbumInfo";
+import HeroSection from "../components/HeroSection";
+import InfiniteScroll from "../components/InfiniteScroll";
+import AlbumInfo from "../components/AlbumInfo";
 
 import { Album } from "../types";
 

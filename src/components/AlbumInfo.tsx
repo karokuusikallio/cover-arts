@@ -9,13 +9,13 @@ import getCollections from "./helpers/getCollections";
 import Modal from "./Modal";
 import Togglable from "./Togglable";
 
-import { Album, LoadingStates as AlbumCRUDStates } from "../../types/index";
+import { Album, LoadingStates as AlbumCRUDStates } from "../types/index";
 
 interface AlbumInfoProps extends Album {
   openedFrom: "search" | "collection";
   collectionId?: string;
   closeModal: () => void;
-  deleteAlbumFromState: (albumId: string) => void;
+  deleteAlbumFromState?: (albumId: string) => void;
 }
 
 interface ReactSelectObject {
@@ -96,7 +96,9 @@ const AlbumInfo = ({
       }
     },
     onSuccess: () => {
-      deleteAlbumFromState(id);
+      if (deleteAlbumFromState) {
+        deleteAlbumFromState(id);
+      }
       queryClient.invalidateQueries(["collections"]);
     },
   });
