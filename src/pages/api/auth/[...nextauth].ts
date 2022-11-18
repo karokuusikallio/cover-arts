@@ -44,6 +44,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.SPOTIFY_CLIENT_SECRET,
     }),
   ],
+  secret: "KVmJsbHWfY9ngjHoN0oR",
 };
 
 export default NextAuth(authOptions);
