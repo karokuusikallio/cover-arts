@@ -7,6 +7,24 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, account }) {
       if (account && account.expires_at && user) {
+        const userId = user.id;
+
+        if (userId) {
+          const response = await fetch(
+            `http://localhost:3000//api/user/login?userId=${userId}`,
+            {
+              method: "POST",
+            }
+          );
+
+          const userCreated = await response.json();
+          console.log(userCreated);
+
+          if (userCreated) {
+            user.inDatabase = true;
+          }
+        }
+
         return {
           accessToken: account.access_token,
           accessTokenExpires: account.expires_at * 1000,
@@ -28,6 +46,7 @@ export const authOptions: NextAuthOptions = {
 
       if (session.user && token.user) {
         session.user.id = token.user.id;
+        session.user.inDatabase = token.user.inDatabase;
       }
 
       if (session.error && token.error) {
@@ -44,7 +63,6 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.SPOTIFY_CLIENT_SECRET,
     }),
   ],
-  secret: env.NEXTAUTH_SECRET,
 };
 
 export default NextAuth(authOptions);

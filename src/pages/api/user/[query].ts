@@ -22,8 +22,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     if (userId) {
       try {
-        const userCreated = await prisma.user.create({
-          data: { userName: userId as string },
+        const userCreated = await prisma.user.upsert({
+          where: { userName: userId as string },
+          update: {},
+          create: { userName: userId as string },
         });
         return res.status(200).json(userCreated);
       } catch (error) {

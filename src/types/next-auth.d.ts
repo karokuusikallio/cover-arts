@@ -7,7 +7,7 @@ declare module "next-auth/jwt" {
     accessToken?: string;
     refreshToken?: string;
     error?: string;
-    user?: User | AdapterUser;
+    user?: { inDatabase: boolean } & (User | AdapterUser);
   }
 }
 
@@ -18,6 +18,7 @@ declare module "next-auth" {
     error: string;
     user?: {
       id: string;
+      inDatabase: boolean;
     } & DefaultSession["user"];
   }
 }

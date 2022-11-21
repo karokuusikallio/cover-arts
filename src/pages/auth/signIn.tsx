@@ -8,11 +8,15 @@ export default function Signin() {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      signIn("spotify", { callbackUrl: "/?login=true" });
+      signIn("spotify", { callbackUrl: "/" });
     } else if (status === "authenticated") {
-      void router.push("/?login=true");
+      void router.push("/");
     }
   }, [status, router]);
 
-  return <div></div>;
+  return (
+    <div>
+      <p>Trying to log in...</p>
+    </div>
+  );
 }
