@@ -19,7 +19,6 @@ const Home: NextPage = () => {
           setUserId(session.user.id);
           return;
         }
-
         signOut();
       }
     };
@@ -43,12 +42,19 @@ const Home: NextPage = () => {
       <HeroSection backgroundName="record-store">
         <h1 className="opacity-100">SpotArt App</h1>
       </HeroSection>
-      <button
-        className="text-bold m-5 h-8 rounded-lg bg-spotartPurple px-2 uppercase text-white hover:bg-spotartLightPurple"
-        onClick={() => signIn("spotify")}
-      >
-        Sign in with Spotify
-      </button>
+      <div className="px-20">
+        <p className="my-5 w-2/3 text-xl font-semibold text-spotartPurple">
+          SpotArt is an app where you can search and discover new music based on
+          album cover art. You can also create collections from your favorite
+          covers. You only need a Spotify account!
+        </p>
+        <button
+          className="text-bold h-8 rounded-lg bg-spotartPurple px-2 uppercase text-white hover:bg-spotartLightPurple"
+          onClick={() => signIn("spotify")}
+        >
+          Sign in with Spotify
+        </button>
+      </div>
     </main>
   );
 };

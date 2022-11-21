@@ -71,7 +71,7 @@ const InfiniteScroll = (props: InfiniteScrollProps) => {
           <div>
             {pages
               ? pages.map((page, index) => (
-                  <div key={index} className="flex flex-wrap justify-center">
+                  <div key={index} className="my-5 flex flex-wrap px-20">
                     {page
                       ? page.map((album) => {
                           return album.images[1] ? (

@@ -89,12 +89,12 @@ const Dashboard: NextPage = () => {
   };
 
   return (
-    <div className="m-5 p-2">
+    <div className="my-5 px-20">
       <h1 className="flex items-center text-xl font-semibold text-spotartPurple">
         My Collections
       </h1>
       <button
-        className="text-bold m-5 h-8 rounded-lg bg-spotartPurple px-2 uppercase text-white hover:bg-spotartLightPurple"
+        className="text-bold my-5 h-8 rounded-lg bg-spotartPurple px-2 uppercase text-white hover:bg-spotartLightPurple"
         onClick={() => setAddModalVisibility(true)}
       >
         Add new Collection
@@ -111,18 +111,18 @@ const Dashboard: NextPage = () => {
       ) : (
         collections.map((collection) => (
           <div
-            className="m-5 flex justify-between rounded-lg border-2 border-solid border-spotartPurple p-2"
+            className="my-5 flex justify-between rounded-lg border-2 border-solid border-spotartPurple p-2"
             key={collection.id}
           >
-            <div className="flex w-1/2 flex-col text-left">
-              <Link href={`/collection/${collection.id}`}>
+            <Link href={`/collection/${collection.id}`}>
+              <div className="flex w-1/2 cursor-pointer flex-col text-left">
                 <a className="text-l flex items-center font-semibold text-spotartPurple hover:text-spotartLightPurple">
                   {collection.collectionName}
                 </a>
-              </Link>
-              <p>Albums in collection: {collection.albums.length}</p>
-              <p>Created: {dateIntoString(collection.createdAt)}</p>
-            </div>
+                <p>Albums in collection: {collection.albums.length}</p>
+                <p>Created: {dateIntoString(collection.createdAt)}</p>
+              </div>
+            </Link>
             <button
               onClick={() => handleDeleteCollection.mutate(collection.id)}
               className="text-bold m-5 h-8 rounded-lg bg-spotartPurple px-2 uppercase text-white hover:bg-spotartLightPurple"

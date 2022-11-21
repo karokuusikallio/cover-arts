@@ -162,7 +162,7 @@ const AlbumInfo = ({
                 visible={albumFormVisible}
                 setVisibility={setAlbumFormVisible}
               >
-                <form onSubmit={handleAddAlbum.mutate}>
+                <form onSubmit={handleAddAlbum.mutate} className="m-2">
                   <div>
                     <label>Collection name</label>
                     <Select
@@ -173,7 +173,7 @@ const AlbumInfo = ({
                   </div>
                   <button
                     disabled={chosenCollection === null}
-                    className="text-bold m-5 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
+                    className="text-bold mt-5 rounded-lg bg-spotartPurple p-1 px-3 uppercase text-white hover:bg-spotartLightPurple"
                     type="submit"
                   >
                     Add album

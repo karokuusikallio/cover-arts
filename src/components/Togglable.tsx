@@ -15,7 +15,7 @@ const Togglable = (props: TogglableProps) => {
     <div>
       <div style={hideWhenVisible}>
         <button
-          className="text-bold my-5 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
+          className="text-bold my-5 rounded-lg bg-spotartPurple py-1 px-4 uppercase text-white hover:bg-spotartLightPurple"
           onClick={() => props.setVisibility(!props.visible)}
         >
           {props.buttonLabel}
@@ -24,7 +24,7 @@ const Togglable = (props: TogglableProps) => {
       <div style={showWhenVisible}>
         {props.children}
         <button
-          className="text-bold m-5 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
+          className="text-bold m-2 rounded-lg bg-spotartPurple p-1 px-3 uppercase text-white hover:bg-spotartLightPurple"
           onClick={() => props.setVisibility(!props.visible)}
         >
           Cancel

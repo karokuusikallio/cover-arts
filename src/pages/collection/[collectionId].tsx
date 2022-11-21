@@ -65,7 +65,7 @@ const CollectionPage: NextPage = () => {
       <HeroSection backgroundName="record-store">
         <h1 className="opacity-100">{collectionName ?? ""}</h1>
       </HeroSection>
-      <div className="flex flex-wrap justify-center">
+      <div className="my-5 flex flex-wrap px-20">
         {isLoading === LoadingStates.loading ? (
           <p>Loading...</p>
         ) : isLoading === LoadingStates.finished && albums.length > 0 ? (
