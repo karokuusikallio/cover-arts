@@ -10,12 +10,9 @@ export const authOptions: NextAuthOptions = {
         const userId = user.id;
 
         if (userId) {
-          const response = await fetch(
-            `http://localhost:3000//api/user/login?userId=${userId}`,
-            {
-              method: "POST",
-            }
-          );
+          const response = await fetch(`${env.SAVE_USER_URL}${userId}`, {
+            method: "POST",
+          });
 
           const userCreated = await response.json();
           console.log(userCreated);
@@ -41,7 +38,7 @@ export const authOptions: NextAuthOptions = {
     },
     session({ session, token }) {
       if (token.accessToken) {
-        session.accessToken = token.accessToken;
+        session.accessToken = token.accessToken as string;
       }
 
       if (session.user && token.user) {
