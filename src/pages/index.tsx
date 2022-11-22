@@ -9,14 +9,17 @@ import getSessionInfo from "../components/helpers/getSessionInfo";
 
 const Home: NextPage = () => {
   const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const checkUser = async () => {
+      setLoading(true);
       const session = await getSessionInfo();
 
       if (session && session.user) {
         if (session?.user?.inDatabase === true) {
           setUserId(session.user.id);
+          setLoading(false);
           return;
         }
         signOut();
@@ -25,6 +28,10 @@ const Home: NextPage = () => {
 
     checkUser();
   }, []);
+
+  if (loading) {
+    <p className="flex-1 overflow-y-scroll">Loading...</p>;
+  }
 
   if (userId) {
     return (

@@ -10,11 +10,11 @@ const HeroSection = (props: HeroSectionProps) => {
   let bgClass = theme?.extend?.backgroundImage?.hasOwnProperty(
     `${props.backgroundName}`
   )
-    ? `bg-${props.backgroundName}`
-    : `bg-record-store`;
+    ? `url("/img/${props.backgroundName}.jpg")`
+    : `url("/img/record-store.jpg")`;
 
   if (props.backgroundName === "none") {
-    bgClass = "";
+    bgClass = "none";
     bgColor = "";
   }
 
@@ -22,7 +22,8 @@ const HeroSection = (props: HeroSectionProps) => {
 
   return (
     <div
-      className={`h-28 items-center ${bgClass} bg-cover bg-center bg-no-repeat text-4xl font-bold text-spotartPurple`}
+      style={{ backgroundImage: `${bgClass}` }}
+      className={`h-28 items-center bg-cover bg-center bg-no-repeat text-4xl font-bold text-spotartPurple`}
     >
       <div className={`flex h-full w-full items-center ${bgColor} px-20`}>
         {props.children}
