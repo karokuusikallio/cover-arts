@@ -22,7 +22,10 @@ const Home: NextPage = () => {
           return;
         }
         signOut();
+        return;
       }
+
+      setLoading(false);
     };
 
     checkUser();
