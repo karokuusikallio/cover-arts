@@ -6,17 +6,25 @@ interface HeroSectionProps {
 }
 
 const HeroSection = (props: HeroSectionProps) => {
-  const backgroundClass = theme?.extend?.backgroundImage?.hasOwnProperty(
+  let bgColor = `bg-white/70`;
+  let bgClass = theme?.extend?.backgroundImage?.hasOwnProperty(
     `${props.backgroundName}`
   )
     ? `bg-${props.backgroundName}`
     : `bg-record-store`;
 
+  if (props.backgroundName === "none") {
+    bgClass = "";
+    bgColor = "";
+  }
+
+  console.log(bgClass);
+
   return (
     <div
-      className={`h-28 items-center ${backgroundClass} bg-cover bg-center bg-no-repeat text-4xl font-bold text-spotartPurple`}
+      className={`h-28 items-center ${bgClass} bg-cover bg-center bg-no-repeat text-4xl font-bold text-spotartPurple`}
     >
-      <div className="flex h-full w-full items-center bg-white/70 px-20">
+      <div className={`flex h-full w-full items-center ${bgColor} px-20`}>
         {props.children}
       </div>
     </div>

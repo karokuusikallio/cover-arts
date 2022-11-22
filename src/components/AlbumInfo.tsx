@@ -196,7 +196,7 @@ const AlbumInfo = ({
                 Remove from collection
               </button>
             ) : albumCRUDState === AlbumCRUDStates.loading ? (
-              <p>Deleting album...</p>
+              <p className="m-2">Deleting album...</p>
             ) : null
           ) : null}
         </div>

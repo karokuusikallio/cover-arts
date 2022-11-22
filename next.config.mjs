@@ -23,5 +23,6 @@ export default defineNextConfig({
   },
   images: {
     domains: ["i.scdn.co"],
+    unoptimized: true,
   },
 });
