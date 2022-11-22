@@ -34,10 +34,7 @@ const Home: NextPage = () => {
   if (loading) {
     return (
       <main className="flex-1 overflow-y-scroll">
-        <HeroSection backgroundName="record-store">
-          <h1 className="opacity-100">Dashboard</h1>
-        </HeroSection>
-        <p className="flex-1 overflow-y-scroll">Loading...</p>;
+        <p className="p-20">Loading...</p>
       </main>
     );
   }
