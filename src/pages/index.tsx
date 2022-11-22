@@ -9,11 +9,10 @@ import getSessionInfo from "../components/helpers/getSessionInfo";
 
 const Home: NextPage = () => {
   const [userId, setUserId] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const checkUser = async () => {
-      setLoading(true);
       const session = await getSessionInfo();
 
       if (session && session.user) {
@@ -30,7 +29,14 @@ const Home: NextPage = () => {
   }, []);
 
   if (loading) {
-    <p className="flex-1 overflow-y-scroll">Loading...</p>;
+    return (
+      <main className="flex-1 overflow-y-scroll">
+        <HeroSection backgroundName="record-store">
+          <h1 className="opacity-100">Dashboard</h1>
+        </HeroSection>
+        <p className="flex-1 overflow-y-scroll">Loading...</p>;
+      </main>
+    );
   }
 
   if (userId) {
