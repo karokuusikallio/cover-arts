@@ -81,10 +81,11 @@ const Browse: NextPage = () => {
           <p className="py-2">Genres</p>
           <ReactTags
             classNames={{
-              tags: "flex items-start pb-2",
+              tags: "flex items-start pb-2 md:flex-row flex-col",
               selected: "order-2 flex flex-wrap",
               tag: "bg-spotartPurple text-white rounded-lg p-2 mb-2 mr-2 !cursor-default",
-              tagInput: "mr-2 order-1 rounded-lg border-2 border-black p-2",
+              tagInput:
+                "mr-2 mb-2 order-1 rounded-lg border-2 border-black p-2",
               tagInputField: "focus:outline-none",
               remove: "pl-2",
               suggestions: "fixed bg-white z-1000 p-5 drop-shadow-xl mt-1",

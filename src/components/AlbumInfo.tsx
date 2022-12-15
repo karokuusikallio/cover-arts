@@ -121,10 +121,10 @@ const AlbumInfo = ({
   return (
     <Modal>
       <div
-        className="lg-pt-[18rem] my-20 flex w-full flex-col items-center justify-between bg-white
+        className="my-20 flex w-full flex-col items-center justify-between bg-white
       p-5 md:w-[90%] lg:flex-row"
       >
-        <div>
+        <div className="mt-[400px] lg:mt-0">
           {images[0] ? (
             <Image src={images[0]?.url} alt="" height={600} width={600} />
           ) : null}

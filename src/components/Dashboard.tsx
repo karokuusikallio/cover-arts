@@ -125,7 +125,7 @@ const Dashboard: NextPage = () => {
             </Link>
             <button
               onClick={() => handleDeleteCollection.mutate(collection.id)}
-              className="text-bold m-5 h-full rounded-lg bg-spotartPurple px-2 uppercase text-white hover:bg-spotartLightPurple"
+              className="text-bold m-5 h-full rounded-lg bg-spotartPurple p-2 uppercase text-white hover:bg-spotartLightPurple"
             >
               Delete Collection
             </button>

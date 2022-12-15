@@ -15,8 +15,8 @@ export default function Signin() {
   }, [status, router]);
 
   return (
-    <div>
-      <p>Trying to log in...</p>
+    <div className="flex-1 overflow-y-scroll">
+      <p className="p-20">Trying to log in...</p>
     </div>
   );
 }

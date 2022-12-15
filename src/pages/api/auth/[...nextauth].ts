@@ -15,7 +15,6 @@ export const authOptions: NextAuthOptions = {
           });
 
           const userCreated = await response.json();
-          console.log(userCreated);
 
           if (userCreated) {
             user.inDatabase = true;
