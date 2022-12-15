@@ -48,7 +48,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
   const queryClient = new QueryClient();
   return (
     <>
-      <Head>SpotArt App</Head>
+      <Head>
+        <title>SpotArt App</title>
+      </Head>
       <Menu
         styles={burgerMenuStyles}
         isOpen={isOpen}
