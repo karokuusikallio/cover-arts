@@ -49,7 +49,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <>
       <Head>
-        <title>SpotArt App</title>
+        <title>Cover Arts App</title>
       </Head>
       <Menu
         styles={burgerMenuStyles}

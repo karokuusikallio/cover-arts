@@ -53,12 +53,12 @@ const Home: NextPage = () => {
   return (
     <main className="flex-1 overflow-y-scroll bg-record-store bg-cover bg-center bg-no-repeat">
       <HeroSection backgroundName="none">
-        <h1 className="bg-white p-2 opacity-100">SpotArt App</h1>
+        <h1 className="bg-white p-2 opacity-100">Cover Arts App</h1>
       </HeroSection>
       <div className="p-5 sm:p-20">
         <p className="my-5 inline w-2/3 bg-white text-xl font-semibold text-spotartPurple">
-          SpotArt is an app where you can search and discover new music based on
-          album cover art. You can also create collections from your favorite
+          Cover Arts is an app where you can search and discover new music based
+          on album cover art. You can also create collections from your favorite
           covers. You only need a Spotify account.
         </p>
         <br />

@@ -18,7 +18,7 @@ const AddCollectionForm = (props: AddCollectionProps) => {
 
   return props.visibility ? (
     <Modal>
-      <div className="h-1/3 w-1/2 bg-white p-5">
+      <div className="h-1/3 w-1/2 min-w-[350px] bg-white p-5">
         <h2 className="text-l inline font-semibold text-spotartPurple">
           Create New Collection
         </h2>
@@ -31,7 +31,7 @@ const AddCollectionForm = (props: AddCollectionProps) => {
         <div className="flex justify-between align-middle">
           <form
             onSubmit={handleForm}
-            className="flex w-2/3 flex-col p-2 [&>*]:m-2"
+            className="flex w-[80%] flex-col p-2 [&>*]:m-2"
           >
             <label>Collection Name</label>
             <input
