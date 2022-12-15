@@ -74,9 +74,9 @@ const Browse: NextPage = () => {
   return (
     <main className="flex-1 overflow-y-scroll">
       <HeroSection backgroundName="record">
-        <h1>Discover new albums</h1>
+        <h1>Discover</h1>
       </HeroSection>
-      <div className="mx-20">
+      <div className="mx-5 sm:mx-20">
         <form onSubmit={handleBrowseSubmit} className="m-2 flex flex-col">
           <p className="py-2">Genres</p>
           <ReactTags
@@ -108,13 +108,13 @@ const Browse: NextPage = () => {
             step={5}
             value={targetPopularity}
             onChange={({ target }) => handleSliderChange(Number(target.value))}
-            className="w-1/3 py-2"
+            className="max-w-md py-2"
           />
           <button
-            className="text-bold my-5 h-8 w-24 rounded-lg bg-spotartPurple uppercase text-white hover:bg-spotartLightPurple"
+            className="text-bold my-5 inline-block h-full max-w-[260px] rounded-lg bg-spotartPurple p-2 uppercase text-white hover:bg-spotartLightPurple"
             type="submit"
           >
-            Search
+            Discover
           </button>
         </form>
       </div>

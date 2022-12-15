@@ -25,18 +25,18 @@ const Search: NextPage = () => {
   return (
     <main className="flex-1 overflow-y-scroll">
       <HeroSection backgroundName="record-wall">
-        <h1>Search for album covers</h1>
+        <h1>Search</h1>
       </HeroSection>
-      <form onSubmit={handleSearch} className="mx-20 flex flex-col">
+      <form onSubmit={handleSearch} className="mx-5 flex flex-col sm:mx-20">
         <label className="py-5">Artist Name</label>
         <input
-          className="w-1/2 rounded-lg border-2 border-black p-2"
+          className="max-w-[500px] rounded-lg border-2 border-black p-2"
           type="text"
           value={searchParam}
           onChange={({ target }) => setSearchParam(target.value)}
         />
         <button
-          className="text-bold my-5 h-8 w-24 rounded-lg bg-spotartPurple uppercase text-white hover:bg-spotartLightPurple"
+          className="text-bold my-5 inline-block h-full max-w-[250px] rounded-lg bg-spotartPurple p-2 uppercase text-white hover:bg-spotartLightPurple"
           type="submit"
         >
           Search

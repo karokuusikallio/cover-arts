@@ -18,14 +18,14 @@ const HeroSection = (props: HeroSectionProps) => {
     bgColor = "";
   }
 
-  console.log(bgClass);
-
   return (
     <div
       style={{ backgroundImage: `${bgClass}` }}
       className={`h-28 items-center bg-cover bg-center bg-no-repeat text-4xl font-bold text-spotartPurple`}
     >
-      <div className={`flex h-full w-full items-center ${bgColor} px-20`}>
+      <div
+        className={`flex h-full w-full items-center ${bgColor} px-5 sm:px-20`}
+      >
         {props.children}
       </div>
     </div>

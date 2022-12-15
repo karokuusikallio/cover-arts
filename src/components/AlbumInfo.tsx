@@ -120,29 +120,24 @@ const AlbumInfo = ({
 
   return (
     <Modal>
-      <div className="flex h-5/6 w-5/6 bg-white">
-        <span className="relative m-5 w-2/3">
+      <div
+        className="lg-pt-[18rem] my-20 flex w-full flex-col items-center justify-between bg-white
+      p-5 md:w-[90%] lg:flex-row"
+      >
+        <div>
           {images[0] ? (
-            <Image
-              src={images[0]?.url}
-              alt=""
-              layout="fill"
-              objectFit="contain"
-            />
+            <Image src={images[0]?.url} alt="" height={600} width={600} />
           ) : null}
-        </span>
-        <div className="m-5 flex w-1/3 flex-col justify-center text-center">
+        </div>
+        <div className="m-5 flex flex-col justify-center text-center">
           <b>Artist:</b>
           <p>{artistsNamesAsString}</p>
-          <br />
           <br />
           <b>Album:</b>
           <p>{name ?? "Not Found"}</p>
           <br />
-          <br />
           <b>Release Year</b>
           <p>{releaseYear}</p>
-          <br />
           <br />
           {external_urls.spotify ? (
             <a
@@ -181,9 +176,9 @@ const AlbumInfo = ({
                 </form>
               </Togglable>
             ) : albumCRUDState === AlbumCRUDStates.loading ? (
-              <p>Adding album...</p>
+              <p className="m-2">Adding album...</p>
             ) : albumCRUDState === AlbumCRUDStates.finished ? (
-              <p>Album Added!</p>
+              <p className="m-2">Album Added!</p>
             ) : null
           ) : null}
 
@@ -200,12 +195,14 @@ const AlbumInfo = ({
             ) : null
           ) : null}
         </div>
-        <button
-          className="text-bold relative top-0 right-0 m-5 h-8 w-8 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
-          onClick={() => closeModal()}
-        >
-          X
-        </button>
+        <div className="flex h-full justify-center">
+          <button
+            className="text-bold m-5 h-8 w-10 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
+            onClick={() => closeModal()}
+          >
+            X
+          </button>
+        </div>
       </div>
     </Modal>
   );

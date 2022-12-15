@@ -71,7 +71,10 @@ const InfiniteScroll = (props: InfiniteScrollProps) => {
           <div>
             {pages
               ? pages.map((page, index) => (
-                  <div key={index} className="my-5 flex flex-wrap px-20">
+                  <div
+                    key={index}
+                    className="my-5 flex flex-wrap px-5 sm:px-20"
+                  >
                     {page
                       ? page.map((album) => {
                           return album.images[1] ? (
@@ -108,7 +111,9 @@ const InfiniteScroll = (props: InfiniteScrollProps) => {
                 : "End of results"}
             </button>
           </div>
-          <div>{isFetching && !isFetchingNextPage ? "Loading..." : null}</div>
+          <div className="my-5 px-5 sm:px-20">
+            {isFetching && !isFetchingNextPage ? "Loading..." : null}
+          </div>
         </>
       )}
     </main>
