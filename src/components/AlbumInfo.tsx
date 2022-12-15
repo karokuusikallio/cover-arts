@@ -121,8 +121,8 @@ const AlbumInfo = ({
   return (
     <Modal>
       <div
-        className="my-20 flex w-full flex-col items-center justify-between bg-white
-      p-5 md:w-[90%] lg:flex-row"
+        className="my-20 flex w-full flex-col items-center justify-between bg-white p-5
+      md:w-[90%] lg:h-[90%] lg:flex-row"
       >
         <div className="mt-[400px] lg:mt-0">
           {images[0] ? (
@@ -195,7 +195,7 @@ const AlbumInfo = ({
             ) : null
           ) : null}
         </div>
-        <div className="flex h-full justify-center">
+        <div className="h-full">
           <button
             className="text-bold m-5 h-8 w-10 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
             onClick={() => closeModal()}
