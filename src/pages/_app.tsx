@@ -50,6 +50,18 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <>
       <Head>
         <title>Cover Arts App</title>
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/cover-arts-favicon-32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/cover-arts-favicon-16.png"
+        />
       </Head>
       <Menu
         styles={burgerMenuStyles}

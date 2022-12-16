@@ -12,7 +12,7 @@ const Togglable = (props: TogglableProps) => {
   const showWhenVisible = { display: props.visible ? "" : "none" };
 
   return (
-    <div>
+    <div className="w-full">
       <div style={hideWhenVisible}>
         <button
           className="text-bold my-5 rounded-lg bg-spotartPurple py-1 px-4 uppercase text-white hover:bg-spotartLightPurple"

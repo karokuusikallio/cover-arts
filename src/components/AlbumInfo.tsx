@@ -129,7 +129,14 @@ const AlbumInfo = ({
             <Image src={images[0]?.url} alt="" height={600} width={600} />
           ) : null}
         </div>
-        <div className="m-5 flex flex-col justify-center text-center">
+        <div className="m-5 flex flex-col items-center justify-center text-center">
+          <Image
+            className="m-8"
+            src={"/spotify-logo-cropped.svg"}
+            width={120}
+            height={50}
+            alt={"spotify-logo"}
+          />
           <b>Artist:</b>
           <p>{artistsNamesAsString}</p>
           <br />
@@ -141,7 +148,7 @@ const AlbumInfo = ({
           <br />
           {external_urls.spotify ? (
             <a
-              className="text-bold mx-5 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
+              className="text-bold mx-5 rounded-lg bg-spotartPurple p-2 uppercase text-white hover:bg-spotartLightPurple"
               href={external_urls.spotify}
               target="_blank"
               rel="noreferrer"
@@ -157,7 +164,7 @@ const AlbumInfo = ({
                 visible={albumFormVisible}
                 setVisibility={setAlbumFormVisible}
               >
-                <form onSubmit={handleAddAlbum.mutate} className="m-2">
+                <form onSubmit={handleAddAlbum.mutate} className="m-2 h-full">
                   <div>
                     <label>Collection name</label>
                     <Select
@@ -168,7 +175,7 @@ const AlbumInfo = ({
                   </div>
                   <button
                     disabled={chosenCollection === null}
-                    className="text-bold mt-5 rounded-lg bg-spotartPurple p-1 px-3 uppercase text-white hover:bg-spotartLightPurple"
+                    className="text-bold mt-5 rounded-lg bg-spotartPurple p-2 px-3 uppercase text-white hover:bg-spotartLightPurple"
                     type="submit"
                   >
                     Add album
@@ -185,7 +192,7 @@ const AlbumInfo = ({
           {openedFrom === "collection" ? (
             albumCRUDState === AlbumCRUDStates.idle ? (
               <button
-                className="text-bold m-5 rounded-lg bg-spotartPurple p-1 uppercase text-white hover:bg-spotartLightPurple"
+                className="text-bold m-5 rounded-lg bg-spotartPurple p-2 uppercase text-white hover:bg-spotartLightPurple"
                 onClick={() => handleDeleteAlbum.mutate()}
               >
                 Remove from collection
