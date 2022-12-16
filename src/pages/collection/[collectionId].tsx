@@ -65,7 +65,7 @@ const CollectionPage: NextPage = () => {
       <HeroSection backgroundName="record-store">
         <h1 className="opacity-100">{collectionName ?? ""}</h1>
       </HeroSection>
-      <div className="my-5 flex flex-wrap px-20">
+      <div className="my-5 flex flex-wrap px-5 sm:px-20">
         {isLoading === LoadingStates.loading ? (
           <p>Loading...</p>
         ) : isLoading === LoadingStates.finished && albums.length > 0 ? (
@@ -76,7 +76,7 @@ const CollectionPage: NextPage = () => {
                 onClick={() => setModalAlbumInfo(album)}
                 key={album.id}
               >
-                <Image src={album.images[1].url} alt="" layout="fill" />
+                <Image src={album.images[1].url} alt="" fill />
               </span>
             ) : null;
           })
