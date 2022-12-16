@@ -111,11 +111,11 @@ const Dashboard: NextPage = () => {
       ) : (
         collections.map((collection) => (
           <div
-            className="my-5 flex justify-between rounded-lg border-2 border-solid border-spotartPurple p-2"
+            className="my-5 flex flex-col justify-between rounded-lg border-2 border-solid border-spotartPurple p-2 md:flex-row"
             key={collection.id}
           >
             <Link href={`/collection/${collection.id}`} className="w-full">
-              <div className="flex w-1/2 cursor-pointer flex-col text-left">
+              <div className="flex cursor-pointer flex-col text-left">
                 <h3 className="text-l flex items-center font-semibold text-spotartPurple hover:text-spotartLightPurple">
                   {collection.collectionName}
                 </h3>
