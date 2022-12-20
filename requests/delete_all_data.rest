@@ -1,1 +1,1 @@
-GET http://localhost:3000/api/delete
+POST http://localhost:3000/api/reset

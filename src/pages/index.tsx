@@ -66,6 +66,7 @@ const Home: NextPage = () => {
         <button
           className="text-bold h-8 rounded-lg bg-spotartPurple px-2 uppercase text-white hover:bg-spotartLightPurple"
           onClick={() => signIn("spotify")}
+          id="signInButton"
         >
           Sign in with Spotify
         </button>
