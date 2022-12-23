@@ -73,22 +73,40 @@ const InfiniteScroll = (props: InfiniteScrollProps) => {
               ? pages.map((page, index) => (
                   <div
                     key={index}
-                    className="my-5 flex flex-wrap px-5 sm:px-20"
+                    className="my-5 flex flex-wrap justify-center px-5 sm:px-20"
                   >
                     {page
                       ? page.map((album) => {
                           return album.images[1] ? (
-                            <span
-                              className="relative m-2 h-[300px] w-[300px] cursor-pointer"
-                              onClick={() => props.passModalInfo(album)}
-                              key={album.id}
-                            >
-                              <Image
-                                src={album.images[1].url}
-                                alt=""
-                                layout="fill"
-                              />
-                            </span>
+                            <div className="m-2 flex flex-col shadow-smallShadow">
+                              <a
+                                className="flex flex-row items-center justify-center p-2 font-semibold text-spotartPurple hover:text-spotartLightPurple"
+                                href={album.uri}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                Play on
+                                <Image
+                                  className="p-2"
+                                  src={"/spotify-logo-cropped.svg"}
+                                  width={120}
+                                  height={50}
+                                  alt={"spotify-logo"}
+                                />
+                              </a>
+                              <div
+                                className="relative cursor-pointer"
+                                onClick={() => props.passModalInfo(album)}
+                                key={album.id}
+                              >
+                                <Image
+                                  src={album.images[1].url}
+                                  alt=""
+                                  height={300}
+                                  width={300}
+                                />
+                              </div>
+                            </div>
                           ) : null;
                         })
                       : null}

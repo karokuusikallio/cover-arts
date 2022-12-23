@@ -49,7 +49,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <>
       <Head>
-        <title>Cover Arts App</title>
         <link
           rel="icon"
           type="image/png"

@@ -31,9 +31,7 @@ export interface Album {
   images: Array<Image>;
   artists: Array<Artist>;
   release_date: string;
-  external_urls: {
-    spotify: string;
-  };
+  uri: string;
 }
 
 interface Image {

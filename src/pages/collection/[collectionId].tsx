@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Head from "next/head";
 
 import HeroSection from "../../components/HeroSection";
 import AlbumInfo from "../../components/AlbumInfo";
@@ -61,39 +62,66 @@ const CollectionPage: NextPage = () => {
   };
 
   return (
-    <main className="flex-1 overflow-y-scroll">
-      <HeroSection backgroundName="record-store">
-        <h1 className="opacity-100">{collectionName ?? ""}</h1>
-      </HeroSection>
-      <div className="my-5 flex flex-wrap px-5 sm:px-20">
-        {isLoading === LoadingStates.loading ? (
-          <p>Loading...</p>
-        ) : isLoading === LoadingStates.finished && albums.length > 0 ? (
-          albums.map((album) => {
-            return album.images[1] ? (
-              <span
-                className="relative m-2 h-[300px] w-[300px] cursor-pointer"
-                onClick={() => setModalAlbumInfo(album)}
-                key={album.id}
-              >
-                <Image src={album.images[1].url} alt="" fill />
-              </span>
-            ) : null;
-          })
-        ) : isLoading === LoadingStates.finished && albums.length === 0 ? (
-          <p>No albums</p>
+    <>
+      <Head>
+        <title>{collectionName ?? "Collection"} | Cover Arts</title>
+      </Head>
+      <main className="flex-1 overflow-y-scroll">
+        <HeroSection backgroundName="record-store">
+          <h1 className="opacity-100">{collectionName ?? ""}</h1>
+        </HeroSection>
+        <div className="my-5 flex flex-wrap px-5 sm:px-20">
+          {isLoading === LoadingStates.loading ? (
+            <p>Loading...</p>
+          ) : isLoading === LoadingStates.finished && albums.length > 0 ? (
+            albums.map((album) => {
+              return album.images[1] ? (
+                <div className="m-2 flex flex-col shadow-smallShadow">
+                  <a
+                    className="flex flex-row items-center justify-center p-2 font-semibold text-spotartPurple hover:text-spotartLightPurple"
+                    href={album.uri}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Play on
+                    <Image
+                      className="p-2"
+                      src={"/spotify-logo-cropped.svg"}
+                      width={120}
+                      height={50}
+                      alt={"spotify-logo"}
+                    />
+                  </a>
+                  <div
+                    className="relative cursor-pointer"
+                    onClick={() => setModalAlbumInfo(album)}
+                    key={album.id}
+                  >
+                    <Image
+                      src={album.images[1].url}
+                      alt=""
+                      height={300}
+                      width={300}
+                    />
+                  </div>
+                </div>
+              ) : null;
+            })
+          ) : isLoading === LoadingStates.finished && albums.length === 0 ? (
+            <p>No albums</p>
+          ) : null}
+        </div>
+        {modalAlbumInfo ? (
+          <AlbumInfo
+            {...modalAlbumInfo}
+            deleteAlbumFromState={handleDeleteAlbum}
+            openedFrom="collection"
+            collectionId={collectionId as string}
+            closeModal={() => setModalAlbumInfo(null)}
+          />
         ) : null}
-      </div>
-      {modalAlbumInfo ? (
-        <AlbumInfo
-          {...modalAlbumInfo}
-          deleteAlbumFromState={handleDeleteAlbum}
-          openedFrom="collection"
-          collectionId={collectionId as string}
-          closeModal={() => setModalAlbumInfo(null)}
-        />
-      ) : null}
-    </main>
+      </main>
+    </>
   );
 };
 

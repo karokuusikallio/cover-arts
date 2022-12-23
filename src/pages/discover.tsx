@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
+import Head from "next/head";
 import { FormEvent, useEffect, useState } from "react";
 import { WithContext as ReactTags, Tag } from "react-tag-input";
 import { delimiters, customRender } from "../components/helpers/TagHelpers";
@@ -72,70 +73,77 @@ const Browse: NextPage = () => {
   };
 
   return (
-    <main className="flex-1 overflow-y-scroll">
-      <HeroSection backgroundName="record">
-        <h1>Discover</h1>
-      </HeroSection>
-      <div className="mx-5 sm:mx-20">
-        <form onSubmit={handleBrowseSubmit} className="m-2 flex flex-col">
-          <p className="py-2">Genres</p>
-          <ReactTags
-            classNames={{
-              tags: "flex items-start pb-2 md:flex-row flex-col",
-              selected: "order-2 flex flex-wrap",
-              tag: "bg-spotartPurple text-white rounded-lg p-2 mb-2 mr-2 !cursor-default",
-              tagInput:
-                "mr-2 mb-2 order-1 rounded-lg border-2 border-black p-2",
-              tagInputField: "focus:outline-none",
-              remove: "pl-2",
-              suggestions: "fixed bg-white z-1000 p-5 drop-shadow-xl mt-1",
-            }}
-            placeholder="Search Genres"
-            renderSuggestion={(tag) => customRender(tag)}
-            tags={chosenSeeds}
-            suggestions={availableSeeds}
-            delimiters={delimiters}
-            handleDelete={handleDelete}
-            handleAddition={handleAddition}
-            inputFieldPosition="bottom"
-            minQueryLength={1}
-            autocomplete
+    <>
+      <Head>
+        <title>Discover | Cover Arts</title>
+      </Head>
+      <main className="flex-1 overflow-y-scroll">
+        <HeroSection backgroundName="record">
+          <h1>Discover</h1>
+        </HeroSection>
+        <div className="mx-5 sm:mx-20">
+          <form onSubmit={handleBrowseSubmit} className="m-2 flex flex-col">
+            <p className="py-2">Genres</p>
+            <ReactTags
+              classNames={{
+                tags: "flex items-start pb-2 md:flex-row flex-col",
+                selected: "order-2 flex flex-wrap",
+                tag: "bg-spotartPurple text-white rounded-lg p-2 mb-2 mr-2 !cursor-default",
+                tagInput:
+                  "mr-2 mb-2 order-1 rounded-lg border-2 border-black p-2",
+                tagInputField: "focus:outline-none",
+                remove: "pl-2",
+                suggestions: "fixed bg-white z-1000 p-5 drop-shadow-xl mt-1",
+              }}
+              placeholder="Search Genres"
+              renderSuggestion={(tag) => customRender(tag)}
+              tags={chosenSeeds}
+              suggestions={availableSeeds}
+              delimiters={delimiters}
+              handleDelete={handleDelete}
+              handleAddition={handleAddition}
+              inputFieldPosition="bottom"
+              minQueryLength={1}
+              autocomplete
+            />
+            <p className="py-2">Popularity</p>
+            <input
+              type="range"
+              max={100}
+              min={0}
+              step={5}
+              value={targetPopularity}
+              onChange={({ target }) =>
+                handleSliderChange(Number(target.value))
+              }
+              className="max-w-md py-2"
+            />
+            <button
+              className="text-bold my-5 inline-block h-full max-w-[260px] rounded-lg bg-spotartPurple p-2 uppercase text-white hover:bg-spotartLightPurple"
+              type="submit"
+            >
+              Discover
+            </button>
+          </form>
+        </div>
+        <div>
+          <InfiniteScroll
+            SCROLL_TYPE="discover"
+            queryName="discoverAlbums"
+            seedsAsString={seedsAsString}
+            targetPopularity={targetPopularity}
+            passModalInfo={passModalInfo}
           />
-          <p className="py-2">Popularity</p>
-          <input
-            type="range"
-            max={100}
-            min={0}
-            step={5}
-            value={targetPopularity}
-            onChange={({ target }) => handleSliderChange(Number(target.value))}
-            className="max-w-md py-2"
+        </div>
+        {modalInfo ? (
+          <AlbumInfo
+            {...modalInfo}
+            closeModal={() => setModalInfo(null)}
+            openedFrom="search"
           />
-          <button
-            className="text-bold my-5 inline-block h-full max-w-[260px] rounded-lg bg-spotartPurple p-2 uppercase text-white hover:bg-spotartLightPurple"
-            type="submit"
-          >
-            Discover
-          </button>
-        </form>
-      </div>
-      <div>
-        <InfiniteScroll
-          SCROLL_TYPE="discover"
-          queryName="discoverAlbums"
-          seedsAsString={seedsAsString}
-          targetPopularity={targetPopularity}
-          passModalInfo={passModalInfo}
-        />
-      </div>
-      {modalInfo ? (
-        <AlbumInfo
-          {...modalInfo}
-          closeModal={() => setModalInfo(null)}
-          openedFrom="search"
-        />
-      ) : null}
-    </main>
+        ) : null}
+      </main>
+    </>
   );
 };
 

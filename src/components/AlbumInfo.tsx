@@ -28,7 +28,7 @@ const AlbumInfo = ({
   images,
   artists,
   release_date,
-  external_urls,
+  uri,
   id,
   openedFrom,
   collectionId,
@@ -124,19 +124,12 @@ const AlbumInfo = ({
         className="my-20 flex w-full flex-col items-center justify-between bg-white p-5
       md:w-[90%] lg:h-[90%] lg:flex-row"
       >
-        <div className="mt-[400px] lg:mt-0">
+        <div className="mt-[400px] shadow-smallShadow lg:mt-0">
           {images[0] ? (
             <Image src={images[0]?.url} alt="" height={600} width={600} />
           ) : null}
         </div>
         <div className="m-5 flex flex-col items-center justify-center text-center">
-          <Image
-            className="m-8"
-            src={"/spotify-logo-cropped.svg"}
-            width={120}
-            height={50}
-            alt={"spotify-logo"}
-          />
           <b>Artist:</b>
           <p>{artistsNamesAsString}</p>
           <br />
@@ -146,14 +139,21 @@ const AlbumInfo = ({
           <b>Release Year</b>
           <p>{releaseYear}</p>
           <br />
-          {external_urls.spotify ? (
+          {uri ? (
             <a
-              className="text-bold mx-5 rounded-lg bg-spotartPurple p-2 uppercase text-white hover:bg-spotartLightPurple"
-              href={external_urls.spotify}
+              className="flex flex-row items-center font-semibold text-spotartPurple hover:text-spotartLightPurple"
+              href={uri}
               target="_blank"
               rel="noreferrer"
             >
-              Listen to The Album
+              Play on
+              <Image
+                className="p-2"
+                src={"/spotify-logo-cropped.svg"}
+                width={120}
+                height={50}
+                alt={"spotify-logo"}
+              />
             </a>
           ) : null}
 

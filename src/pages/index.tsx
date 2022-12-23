@@ -1,7 +1,8 @@
 import type { NextPage } from "next";
 import { signIn, signOut } from "next-auth/react";
-import HeroSection from "../components/HeroSection";
+import Head from "next/head";
 
+import HeroSection from "../components/HeroSection";
 import Dashboard from "../components/Dashboard";
 import { useEffect, useState } from "react";
 
@@ -33,45 +34,60 @@ const Home: NextPage = () => {
 
   if (loading) {
     return (
-      <main className="flex-1 overflow-y-scroll">
-        <p className="p-20">Loading...</p>
-      </main>
+      <>
+        <Head>
+          <title>Cover Arts</title>
+        </Head>
+        <main className="flex-1 overflow-y-scroll">
+          <p className="p-20">Loading...</p>
+        </main>
+      </>
     );
   }
 
   if (userId) {
     return (
-      <main className="flex-1 overflow-y-scroll">
-        <HeroSection backgroundName="record-store">
-          <h1 className="opacity-100">Dashboard</h1>
-        </HeroSection>
-        <Dashboard />
-      </main>
+      <>
+        <Head>
+          <title>Dashboard | Cover Arts</title>
+        </Head>
+        <main className="flex-1 overflow-y-scroll">
+          <HeroSection backgroundName="record-store">
+            <h1 className="opacity-100">Dashboard</h1>
+          </HeroSection>
+          <Dashboard />
+        </main>
+      </>
     );
   }
 
   return (
-    <main className="flex-1 overflow-y-scroll bg-record-store bg-cover bg-center bg-no-repeat">
-      <HeroSection backgroundName="none">
-        <h1 className="bg-white p-2 opacity-100">Cover Arts App</h1>
-      </HeroSection>
-      <div className="p-5 sm:p-20">
-        <p className="my-5 inline w-2/3 bg-white text-xl font-semibold text-spotartPurple">
-          Cover Arts is an app where you can search and discover new music based
-          on album cover art. You can also create collections from your favorite
-          covers. You only need a Spotify account.
-        </p>
-        <br />
-        <br />
-        <button
-          className="text-bold h-8 rounded-lg bg-spotartPurple px-2 uppercase text-white hover:bg-spotartLightPurple"
-          onClick={() => signIn("spotify")}
-          id="signInButton"
-        >
-          Sign in with Spotify
-        </button>
-      </div>
-    </main>
+    <>
+      <Head>
+        <title>Cover Arts</title>
+      </Head>
+      <main className="flex-1 overflow-y-scroll bg-record-store bg-cover bg-center bg-no-repeat">
+        <HeroSection backgroundName="none">
+          <h1 className="bg-white p-2 opacity-100">Cover Arts App</h1>
+        </HeroSection>
+        <div className="p-5 sm:p-20">
+          <p className="my-5 inline w-2/3 bg-white text-xl font-semibold text-spotartPurple">
+            Cover Arts is an app where you can search and discover new music
+            based on album cover art. You can also create collections from your
+            favorite covers. You only need a Spotify account.
+          </p>
+          <br />
+          <br />
+          <button
+            className="text-bold h-8 rounded-lg bg-spotartPurple px-2 uppercase text-white hover:bg-spotartLightPurple"
+            onClick={() => signIn("spotify")}
+            id="signInButton"
+          >
+            Sign in with Spotify
+          </button>
+        </div>
+      </main>
+    </>
   );
 };
 
